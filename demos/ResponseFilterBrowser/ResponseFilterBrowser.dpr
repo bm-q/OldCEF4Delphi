@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uResponseFilterBrowser in 'uResponseFilterBrowser.pas' {ResponseFilterBrowserFrm};
 
 {$R *.res}
@@ -56,9 +56,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -68,5 +68,5 @@ begin
       Application.Run;
     end;
 
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

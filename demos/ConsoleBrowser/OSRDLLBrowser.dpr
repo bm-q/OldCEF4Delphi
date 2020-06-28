@@ -55,8 +55,8 @@ uses
   {$ELSE}
   SysUtils,
   {$ENDIF }
-  uCEFApplication,
-  uCEFConstants,
+  oldCefApplication,
+  oldCefConstants,
   uWebBrowser in 'uWebBrowser.pas' {WebBrowserFrm};
 
 {$R *.res}
@@ -66,7 +66,7 @@ uses
 // Chromium based browser using CEF4Delphi
 
 // This demo uses the OSR mode and disables the multithreaded mode. For this reason, the ShowBrowser
-// functions calls GlobalCEFApp.RunMessageLoop and the browser form calls GlobalCEFApp.QuitMessageLoop as the last step in
+// functions calls GlobalOldCEFApp.RunMessageLoop and the browser form calls GlobalOldCEFApp.QuitMessageLoop as the last step in
 // the form destruction.
 
 // To test this demo you need to build the ConsoleLoader, OSRDLLBrowser and OSRSubProcess projects found in this directory.
@@ -82,7 +82,7 @@ uses
 //    CEF you will have problems.
 
 // When you use CEF in a DLL you must use a different EXE for the subprocesses and that EXE
-// must configure GlobalCEFApp with the same properties.
+// must configure GlobalOldCEFApp with the same properties.
 
 // ***************************
 // This demo is incomplete!!!!
@@ -92,45 +92,45 @@ uses
 
 procedure InitializeCEF4Delphi; stdcall;
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
   // In case you want to use custom directories for the CEF3 binaries, cache, cookies and user data.
   // If you don't set a cache directory the browser will use in-memory cache.
   // The cache, cookies and user data directories must be writable.
 {
-  GlobalCEFApp.FrameworkDirPath     := 'cef';
-  GlobalCEFApp.ResourcesDirPath     := 'cef';
-  GlobalCEFApp.LocalesDirPath       := 'cef\locales';
-  GlobalCEFApp.cache                := 'cef\cache';
-  GlobalCEFApp.cookies              := 'cef\cookies';
-  GlobalCEFApp.UserDataPath         := 'cef\User Data';
-  GlobalCEFApp.LogFile              := 'debug.log';
-  GlobalCEFApp.LogSeverity          := LOGSEVERITY_INFO;
+  GlobalOldCEFApp.FrameworkDirPath     := 'cef';
+  GlobalOldCEFApp.ResourcesDirPath     := 'cef';
+  GlobalOldCEFApp.LocalesDirPath       := 'cef\locales';
+  GlobalOldCEFApp.cache                := 'cef\cache';
+  GlobalOldCEFApp.cookies              := 'cef\cookies';
+  GlobalOldCEFApp.UserDataPath         := 'cef\User Data';
+  GlobalOldCEFApp.LogFile              := 'debug.log';
+  GlobalOldCEFApp.LogSeverity          := LOGSEVERITY_INFO;
 }
 
-  GlobalCEFApp.WindowlessRenderingEnabled := True;
-  GlobalCEFApp.EnableHighDPISupport       := True;
-  GlobalCEFApp.SetCurrentDir              := True;
-  GlobalCEFApp.BrowserSubprocessPath      := 'OSRSubProcess.exe';
-  GlobalCEFApp.MultiThreadedMessageLoop   := False;
+  GlobalOldCEFApp.WindowlessRenderingEnabled := True;
+  GlobalOldCEFApp.EnableHighDPISupport       := True;
+  GlobalOldCEFApp.SetCurrentDir              := True;
+  GlobalOldCEFApp.BrowserSubprocessPath      := 'OSRSubProcess.exe';
+  GlobalOldCEFApp.MultiThreadedMessageLoop   := False;
 
   // This demo uses a different EXE for the subprocesses.
   // With this configuration it's not necessary to have the
-  // GlobalCEFApp.StartMainProcess call in a if..then clause.
+  // GlobalOldCEFApp.StartMainProcess call in a if..then clause.
 
-  GlobalCEFApp.StartMainProcess;
+  GlobalOldCEFApp.StartMainProcess;
 end;
 
 procedure FinalizeCEF4Delphi; stdcall;
 begin
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end;
 
 procedure ShowBrowser; stdcall;
 begin
   WebBrowserFrm := TWebBrowserFrm.Create(nil);
   WebBrowserFrm.Show;
-  GlobalCEFApp.RunMessageLoop;
+  GlobalOldCEFApp.RunMessageLoop;
 end;
 
 exports

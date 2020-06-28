@@ -37,7 +37,7 @@
 
 unit uHelloScheme;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 uses
@@ -46,10 +46,10 @@ uses
   {$ELSE}
   Classes, Windows, SysUtils,
   {$ENDIF}
-  uCEFInterfaces, uCEFTypes, uCEFResourceHandler, uCEFMiscFunctions;
+  oldCEFInterfaces, oldCEFTypes, oldCEFResourceHandler, oldCEFMiscFunctions;
 
 type
-  THelloScheme = class(TCefResourceHandlerOwn)
+  THelloScheme = class(TOldCefResourceHandlerOwn)
     private
       FStream      : TMemoryStream;
       FMimeType    : string;
@@ -57,22 +57,22 @@ type
       FStatus      : Integer;
 
     protected
-      function  ProcessRequest(const request: ICefRequest; const callback: ICefCallback): Boolean; override;
-      procedure GetResponseHeaders(const response: ICefResponse; out responseLength: Int64; out redirectUrl: ustring); override;
-      function  ReadResponse(const dataOut: Pointer; bytesToRead: Integer; var bytesRead: Integer; const callback: ICefCallback): Boolean; override;
+      function  ProcessRequest(const request: IOldCefRequest; const callback: IOldCefCallback): Boolean; override;
+      procedure GetResponseHeaders(const response: IOldCefResponse; out responseLength: Int64; out redirectUrl: oldustring); override;
+      function  ReadResponse(const dataOut: Pointer; bytesToRead: Integer; var bytesRead: Integer; const callback: IOldCefCallback): Boolean; override;
 
     public
-      constructor Create(const browser: ICefBrowser; const frame: ICefFrame; const schemeName: ustring; const request: ICefRequest); override;
+      constructor Create(const browser: IOldCefBrowser; const frame: IOldCefFrame; const schemeName: oldustring; const request: IOldCefRequest); override;
       destructor  Destroy; override;
       procedure   AfterConstruction; override;
   end;
 
 implementation
 
-constructor THelloScheme.Create(const browser    : ICefBrowser;
-                                const frame      : ICefFrame;
-                                const schemeName : ustring;
-                                const request    : ICefRequest);
+constructor THelloScheme.Create(const browser    : IOldCefBrowser;
+                                const frame      : IOldCefFrame;
+                                const schemeName : oldustring;
+                                const request    : IOldCefRequest);
 begin
   inherited Create(browser, frame, schemeName, request);
 
@@ -96,9 +96,9 @@ begin
   FStream := TMemoryStream.Create;
 end;
 
-procedure THelloScheme.GetResponseHeaders(const response       : ICefResponse;
+procedure THelloScheme.GetResponseHeaders(const response       : IOldCefResponse;
                                           out   responseLength : Int64;
-                                          out   redirectUrl    : ustring);
+                                          out   redirectUrl    : oldustring);
 begin
   if (response <> nil) then
     begin
@@ -113,10 +113,10 @@ begin
     responseLength := 0;
 end;
 
-function THelloScheme.ProcessRequest(const request : ICefRequest; const callback : ICefCallback): Boolean;
+function THelloScheme.ProcessRequest(const request : IOldCefRequest; const callback : IOldCefCallback): Boolean;
 var
   TempFilename, TempExt : string;
-  TempParts : TUrlParts;
+  TempParts : TOldUrlParts;
   TempFile : TFileStream;
 begin
   Result      := False;
@@ -197,7 +197,7 @@ end;
 function THelloScheme.ReadResponse(const dataOut     : Pointer;
                                          bytesToRead : Integer;
                                    var   bytesRead   : Integer;
-                                   const callback    : ICefCallback): Boolean;
+                                   const callback    : IOldCefCallback): Boolean;
 begin
   if (FStream <> nil) and (DataOut <> nil) then
     begin

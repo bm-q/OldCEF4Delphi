@@ -37,7 +37,7 @@
 
 unit uMainForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,7 +49,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, ComCtrls, Buttons, ExtCtrls, StdCtrls,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFApplication, oldCEFTypes, oldCEFConstants;
 
 const
   CEFBROWSER_DESTROYWNDPARENT = WM_APP + $100;
@@ -89,12 +89,12 @@ type
     FCanClose   : boolean;
     FClosing    : boolean;
 
-    procedure Chromium_OnAfterCreated(Sender: TObject; const browser: ICefBrowser);
-    procedure Chromium_OnAddressChange(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const url: ustring);
-    procedure Chromium_OnTitleChange(Sender: TObject; const browser: ICefBrowser; const title: ustring);
-    procedure Chromium_OnClose(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
-    procedure Chromium_OnBeforeClose(Sender: TObject; const browser: ICefBrowser);
-    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
+    procedure Chromium_OnAfterCreated(Sender: TObject; const browser: IOldCefBrowser);
+    procedure Chromium_OnAddressChange(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const url: oldustring);
+    procedure Chromium_OnTitleChange(Sender: TObject; const browser: IOldCefBrowser; const title: oldustring);
+    procedure Chromium_OnClose(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
+    procedure Chromium_OnBeforeClose(Sender: TObject; const browser: IOldCefBrowser);
+    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
 
     procedure BrowserCreatedMsg(var aMessage : TMessage); message CEF_AFTERCREATED;
     procedure BrowserDestroyWindowParentMsg(var aMessage : TMessage); message CEFBROWSER_DESTROYWNDPARENT;
@@ -110,8 +110,8 @@ type
     procedure CloseAllBrowsers;
     function  GetPageIndex(const aSender : TObject; var aPageIndex : integer) : boolean;
     procedure NotifyMoveOrResizeStarted;
-    function  SearchChromium(aPageIndex : integer; var aChromium : TChromium) : boolean;
-    function  SearchWindowParent(aPageIndex : integer; var aWindowParent : TCEFWindowParent) : boolean;
+    function  SearchChromium(aPageIndex : integer; var aChromium : TOldChromium) : boolean;
+    function  SearchWindowParent(aPageIndex : integer; var aWindowParent : TOldCefWindowParent) : boolean;
 
   public
     { Public declarations }
@@ -120,7 +120,7 @@ type
 var
   MainForm: TMainForm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
@@ -130,39 +130,39 @@ implementation
 // It's not meant to be a complete browser or the best way to implement a tabbed browser.
 
 // In this demo all browsers share the buttons and URL combobox.
-// All TChromium components share the same functions for their events sending the
+// All TOldChromium components share the same functions for their events sending the
 // PageIndex of the Tab where they are included in the Message.lParam parameter if necessary.
 
 // For simplicity the Button panel and the PageControl are disabled while adding or removing tab sheets.
 // The Form can't be closed if it's destroying a tab.
 
 // This is the destruction sequence when a user closes a tab sheet:
-// 1. RemoveTabBtnClick calls TChromium.CloseBrowser of the selected tab which triggers a TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROYWNDPARENT message to destroy TCEFWindowParent in the main thread which triggers a TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sends a CEFBROWSER_DESTROYTAB message to destroy the tab in the main thread.
+// 1. RemoveTabBtnClick calls TOldChromium.CloseBrowser of the selected tab which triggers a TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROYWNDPARENT message to destroy TOldCefWindowParent in the main thread which triggers a TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sends a CEFBROWSER_DESTROYTAB message to destroy the tab in the main thread.
 
 // This is the destruction sequence when the user closes the main form
-// 1. FormCloseQuery hides the form and calls CloseAllBrowsers which calls TChromium.CloseBrowser in all tabs and triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROYWNDPARENT message to destroy TCEFWindowParent in the main thread which triggers a TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sends a CEFBROWSER_CHECKTAGGEDTABS message to set the TAG property to 1 in the TabSheet containing the TChromium. Then sends WM_CLOSE in case all tabsheets have a TAG = 1.
+// 1. FormCloseQuery hides the form and calls CloseAllBrowsers which calls TOldChromium.CloseBrowser in all tabs and triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROYWNDPARENT message to destroy TOldCefWindowParent in the main thread which triggers a TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sends a CEFBROWSER_CHECKTAGGEDTABS message to set the TAG property to 1 in the TabSheet containing the TOldChromium. Then sends WM_CLOSE in case all tabsheets have a TAG = 1.
 
-procedure GlobalCEFApp_OnContextInitialized;
+procedure GlobalOldCEFApp_OnContextInitialized;
 begin
   if (MainForm <> nil) and MainForm.HandleAllocated then
     PostMessage(MainForm.Handle, CEFBROWSER_INITIALIZED, 0, 0);
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  GlobalCEFApp                      := TCefApplication.Create;
-  GlobalCEFApp.OnContextInitialized := GlobalCEFApp_OnContextInitialized;
+  GlobalOldCEFApp                      := TOldCefApplication.Create;
+  GlobalOldCEFApp.OnContextInitialized := GlobalOldCEFApp_OnContextInitialized;
 end;
 
 procedure TMainForm.AddTabBtnClick(Sender: TObject);
 var
   TempSheet        : TTabSheet;
-  TempWindowParent : TCEFWindowParent;
-  TempChromium     : TChromium;
+  TempWindowParent : TOldCefWindowParent;
+  TempChromium     : TOldChromium;
 begin
   ButtonPnl.Enabled    := False;
   PageControl1.Enabled := False;
@@ -171,12 +171,12 @@ begin
   TempSheet.Caption     := 'New Tab';
   TempSheet.PageControl := PageControl1;
 
-  TempWindowParent        := TCEFWindowParent.Create(TempSheet);
+  TempWindowParent        := TOldCefWindowParent.Create(TempSheet);
   TempWindowParent.Parent := TempSheet;
   TempWindowParent.Color  := clWhite;
   TempWindowParent.Align  := alClient;
 
-  TempChromium                 := TChromium.Create(TempSheet);
+  TempChromium                 := TOldChromium.Create(TempSheet);
   TempChromium.OnAfterCreated  := Chromium_OnAfterCreated;
   TempChromium.OnAddressChange := Chromium_OnAddressChange;
   TempChromium.OnTitleChange   := Chromium_OnTitleChange;
@@ -189,7 +189,7 @@ end;
 
 procedure TMainForm.RemoveTabBtnClick(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if SearchChromium(PageControl1.TabIndex, TempChromium) then
     begin
@@ -238,9 +238,9 @@ begin
         begin
           TempComponent := TempSheet.Components[i];
 
-          if (TempComponent <> nil) and (TempComponent is TChromium) then
+          if (TempComponent <> nil) and (TempComponent is TOldChromium) then
             begin
-              TChromium(TempComponent).CloseBrowser(True);
+              TOldChromium(TempComponent).CloseBrowser(True);
               TempCtnue := False;
             end
            else
@@ -260,8 +260,8 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  if (GlobalCEFApp <> nil) and
-     GlobalCEFApp.GlobalContextInitialized and
+  if (GlobalOldCEFApp <> nil) and
+     GlobalOldCEFApp.GlobalContextInitialized and
      not(ButtonPnl.Enabled) then
     begin
       ButtonPnl.Enabled := True;
@@ -273,43 +273,43 @@ end;
 
 procedure TMainForm.ForwardBtnClick(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if SearchChromium(PageControl1.TabIndex, TempChromium) then TempChromium.GoForward;
 end;
 
 procedure TMainForm.GoBtnClick(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if SearchChromium(PageControl1.TabIndex, TempChromium) then TempChromium.LoadURL(URLCbx.Text);
 end;
 
 procedure TMainForm.ReloadBtnClick(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if SearchChromium(PageControl1.TabIndex, TempChromium) then TempChromium.Reload;
 end;
 
 procedure TMainForm.BackBtnClick(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if SearchChromium(PageControl1.TabIndex, TempChromium) then TempChromium.GoBack;
 end;
 
 procedure TMainForm.StopBtnClick(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if SearchChromium(PageControl1.TabIndex, TempChromium) then TempChromium.StopLoad;
 end;
 
 procedure TMainForm.BrowserCreatedMsg(var aMessage : TMessage);
 var
-  TempWindowParent : TCEFWindowParent;
-  TempChromium     : TChromium;
+  TempWindowParent : TOldCefWindowParent;
+  TempChromium     : TOldChromium;
 begin
   ButtonPnl.Enabled    := True;
   PageControl1.Enabled := True;
@@ -323,7 +323,7 @@ end;
 
 procedure TMainForm.BrowserDestroyWindowParentMsg(var aMessage : TMessage);
 var
-  TempWindowParent : TCEFWindowParent;
+  TempWindowParent : TOldCefWindowParent;
 begin
   if SearchWindowParent(aMessage.lParam, TempWindowParent) then TempWindowParent.Free;
 end;
@@ -368,7 +368,7 @@ begin
       dec(i);
 end;
 
-procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 var
   TempPageIndex : integer;
 begin
@@ -376,7 +376,7 @@ begin
     PostMessage(Handle, CEF_AFTERCREATED, 0, TempPageIndex);
 end;
 
-procedure TMainForm.Chromium_OnAddressChange(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const url: ustring);
+procedure TMainForm.Chromium_OnAddressChange(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const url: oldustring);
 var
   TempPageIndex : integer;
 begin
@@ -402,7 +402,7 @@ begin
     end;
 end;
 
-procedure TMainForm.Chromium_OnTitleChange(Sender: TObject; const browser: ICefBrowser; const title: ustring);
+procedure TMainForm.Chromium_OnTitleChange(Sender: TObject; const browser: IOldCefBrowser; const title: oldustring);
 var
   TempPageIndex : integer;
 begin
@@ -410,7 +410,7 @@ begin
     PageControl1.Pages[TempPageIndex].Caption := title;
 end;
 
-procedure TMainForm.Chromium_OnClose(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TMainForm.Chromium_OnClose(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 var
   TempPageIndex : integer;
 begin
@@ -418,7 +418,7 @@ begin
     PostMessage(Handle, CEFBROWSER_DESTROYWNDPARENT, 0, TempPageIndex);
 end;
 
-procedure TMainForm.Chromium_OnBeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TMainForm.Chromium_OnBeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 var
   TempPageIndex : integer;
 begin
@@ -432,18 +432,18 @@ begin
 end;
 
 procedure TMainForm.Chromium_OnBeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
   Result := (targetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
-function TMainForm.SearchChromium(aPageIndex : integer; var aChromium : TChromium) : boolean;
+function TMainForm.SearchChromium(aPageIndex : integer; var aChromium : TOldChromium) : boolean;
 var
   i, j : integer;
   TempComponent : TComponent;
@@ -462,9 +462,9 @@ begin
         begin
           TempComponent := TempSheet.Components[i];
 
-          if (TempComponent <> nil) and (TempComponent is TChromium) then
+          if (TempComponent <> nil) and (TempComponent is TOldChromium) then
             begin
-              aChromium := TChromium(TempComponent);
+              aChromium := TOldChromium(TempComponent);
               Result    := True;
             end
            else
@@ -473,7 +473,7 @@ begin
     end;
 end;
 
-function TMainForm.SearchWindowParent(aPageIndex : integer; var aWindowParent : TCEFWindowParent) : boolean;
+function TMainForm.SearchWindowParent(aPageIndex : integer; var aWindowParent : TOldCefWindowParent) : boolean;
 var
   i, j : integer;
   TempControl : TControl;
@@ -492,9 +492,9 @@ begin
         begin
           TempControl := TempSheet.Controls[i];
 
-          if (TempControl <> nil) and (TempControl is TCEFWindowParent) then
+          if (TempControl <> nil) and (TempControl is TOldCefWindowParent) then
             begin
-              aWindowParent := TCEFWindowParent(TempControl);
+              aWindowParent := TOldCefWindowParent(TempControl);
               Result        := True;
             end
            else
@@ -506,7 +506,7 @@ end;
 procedure TMainForm.NotifyMoveOrResizeStarted;
 var
   i, j : integer;
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if not(showing) or (PageControl1 = nil) or FClosing then exit;
 
@@ -539,21 +539,21 @@ procedure TMainForm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if not(FClosing) and (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then
-    GlobalCEFApp.OsmodalLoop := True;
+  if not(FClosing) and (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then
+    GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TMainForm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if not(FClosing) and (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then
-    GlobalCEFApp.OsmodalLoop := False;
+  if not(FClosing) and (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then
+    GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TMainForm.PageControl1Change(Sender: TObject);
 var
-  TempChromium : TChromium;
+  TempChromium : TOldChromium;
 begin
   if showing and SearchChromium(PageControl1.TabIndex, TempChromium) then
     URLCbx.Text := TempChromium.DocumentURL;

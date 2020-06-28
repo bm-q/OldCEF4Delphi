@@ -37,7 +37,7 @@
 
 unit uMainForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,12 +49,12 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uCEFInterfaces, uCustomResourceHandler,
-  uCEFConstants, uCEFTypes;
+  oldCEFChromium, oldCEFWindowParent, oldCEFChromiumWindow, oldCEFInterfaces, uCustomResourceHandler,
+  oldCEFConstants, oldCEFTypes;
 
 type
   TMainForm = class(TForm)
-    ChromiumWindow1: TChromiumWindow;
+    ChromiumWindow1: TOldChromiumWindow;
     AddressBarPnl: TPanel;
     Edit1: TEdit;
     Button1: TButton;
@@ -76,12 +76,12 @@ type
 
   protected
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure Chromium_OnAfterCreated(Sender: TObject);
-    procedure Chromium_OnGetResourceHandler(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const request: ICefRequest; out Result: ICefResourceHandler);
-    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
+    procedure Chromium_OnGetResourceHandler(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const request: IOldCefRequest; out Result: IOldCefResourceHandler);
+    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
 
   public
     { Public declarations }
@@ -95,13 +95,13 @@ implementation
 {$R *.dfm}
 
 uses
-  uCEFMiscFunctions, uCEFApplication;
+  oldCEFMiscFunctions, oldCEFApplication;
 
 // Destruction steps
 // =================
-// 1. The FormCloseQuery event sets CanClose to False and calls TChromiumWindow.CloseBrowser, which triggers the TChromiumWindow.OnClose event.
-// 2. The TChromiumWindow.OnClose event calls TChromiumWindow.DestroyChildWindow which triggers the TChromiumWindow.OnBeforeClose event.
-// 3. TChromiumWindow.OnBeforeClose sets FCanClose to True and closes the form.
+// 1. The FormCloseQuery event sets CanClose to False and calls TOldChromiumWindow.CloseBrowser, which triggers the TOldChromiumWindow.OnClose event.
+// 2. The TOldChromiumWindow.OnClose event calls TOldChromiumWindow.DestroyChildWindow which triggers the TOldChromiumWindow.OnBeforeClose event.
+// 3. TOldChromiumWindow.OnBeforeClose sets FCanClose to True and closes the form.
 
 procedure TMainForm.Button1Click(Sender: TObject);
 begin
@@ -132,7 +132,7 @@ begin
   ChromiumWindow1.ChromiumBrowser.OnGetResourceHandler := Chromium_OnGetResourceHandler;
   ChromiumWindow1.ChromiumBrowser.OnBeforePopup        := Chromium_OnBeforePopup;
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(ChromiumWindow1.CreateBrowser) then Timer1.Enabled := True;
 end;
@@ -167,10 +167,10 @@ begin
 end;
 
 procedure TMainForm.Chromium_OnGetResourceHandler(Sender : TObject;
-                                                  const browser : ICefBrowser;
-                                                  const frame   : ICefFrame;
-                                                  const request : ICefRequest;
-                                                  out   Result  : ICefResourceHandler);
+                                                  const browser : IOldCefBrowser;
+                                                  const frame   : IOldCefFrame;
+                                                  const request : IOldCefRequest;
+                                                  out   Result  : IOldCefResourceHandler);
 var
   TempStream : TStringStream;
 begin
@@ -192,11 +192,11 @@ begin
 end;
 
 procedure TMainForm.Chromium_OnBeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
@@ -221,14 +221,14 @@ procedure TMainForm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TMainForm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 end.

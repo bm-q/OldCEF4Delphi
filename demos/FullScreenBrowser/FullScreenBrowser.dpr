@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uMainForm in 'uMainForm.pas' {MainForm};
 
 {$R *.res}
@@ -55,15 +55,15 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp              := TCefApplication.Create;
-  GlobalCEFApp.FlashEnabled := False;
+  GlobalOldCEFApp              := TOldCefApplication.Create;
+  GlobalOldCEFApp.FlashEnabled := False;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.CreateForm(TMainForm, MainForm);
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

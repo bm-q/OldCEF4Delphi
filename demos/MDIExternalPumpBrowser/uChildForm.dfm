@@ -54,7 +54,7 @@ object ChildForm: TChildForm
       OnClick = Button1Click
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 30
     Width = 708
@@ -75,7 +75,7 @@ object ChildForm: TChildForm
         Width = 500
       end>
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnLoadingStateChange = Chromium1LoadingStateChange
     OnStatusMessage = Chromium1StatusMessage
     OnBeforePopup = Chromium1BeforePopup

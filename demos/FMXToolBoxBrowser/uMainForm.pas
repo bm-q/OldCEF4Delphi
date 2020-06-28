@@ -37,7 +37,7 @@
 
 unit uMainForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -89,7 +89,7 @@ type
 var
   MainForm: TMainForm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
@@ -97,16 +97,16 @@ implementation
 
 uses
   FMX.Platform, FMX.Platform.Win,
-  uCEFMiscFunctions, uFMXApplicationService, uChildForm, uCEFApplication;
+  oldCEFMiscFunctions, uFMXApplicationService, uChildForm, oldCEFApplication;
 
 // This Firemonkey demo shows how to create child windows with browsers using CEF4Delphi.
 // It uses a custom IFMXApplicationService to handle Windows messages.
 
- // The application must not try to create browsers before GlobalCEFApp.GlobalContextInitialized
-// is TRUE, which is set in a different thread when the GlobalCEFApp.OnContextInitialized
+ // The application must not try to create browsers before GlobalOldCEFApp.GlobalContextInitialized
+// is TRUE, which is set in a different thread when the GlobalOldCEFApp.OnContextInitialized
 // event is triggered.
 // There are several ways to handle the race between the form creation and the
-// GlobalCEFApp.OnContextInitialized event but this demo is using a simple check
+// GlobalOldCEFApp.OnContextInitialized event but this demo is using a simple check
 // in the TForm.OnShow event.
 
  // All FMX applications using CEF4Delphi should add the $(FrameworkType) conditional define
@@ -124,15 +124,15 @@ uses
 // 2. Wait until all the child forms are closed before closing the main form and terminating the application.
 
 
-procedure GlobalCEFApp_OnContextInitialized;
+procedure GlobalOldCEFApp_OnContextInitialized;
 begin
   if (MainForm <> nil) then MainForm.PostCustomMessage(CEF_INITIALIZED);
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  GlobalCEFApp                      := TCefApplication.Create;
-  GlobalCEFApp.OnContextInitialized := GlobalCEFApp_OnContextInitialized;
+  GlobalOldCEFApp                      := TOldCefApplication.Create;
+  GlobalOldCEFApp.OnContextInitialized := GlobalOldCEFApp_OnContextInitialized;
 end;
 
 function TMainForm.PostCustomMessage(aMessage, wParam : cardinal; lParam : integer) : boolean;
@@ -270,7 +270,7 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  if (GlobalCEFApp <> nil) and GlobalCEFApp.GlobalContextInitialized then DoCEFInitialized;
+  if (GlobalOldCEFApp <> nil) and GlobalOldCEFApp.GlobalContextInitialized then DoCEFInitialized;
 end;
 
 procedure TMainForm.DoCEFInitialized;

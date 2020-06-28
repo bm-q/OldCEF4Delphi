@@ -37,7 +37,7 @@
 
 unit uMiniBrowser;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -50,7 +50,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Menus,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Types, ComCtrls, ClipBrd, AppEvnts, ActiveX, ShlObj,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFApplication, oldCEFTypes, oldCEFConstants;
 
 const
   MINIBROWSER_SHOWDEVTOOLS    = WM_APP + $101;
@@ -85,10 +85,10 @@ type
     BackBtn: TButton;
     ForwardBtn: TButton;
     ReloadBtn: TButton;
-    CEFWindowParent1: TCEFWindowParent;
-    Chromium1: TChromium;
+    CEFWindowParent1: TOldCefWindowParent;
+    Chromium1: TOldChromium;
     StopBtn: TButton;
-    DevTools: TCEFWindowParent;
+    DevTools: TOldCefWindowParent;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
     URLCbx: TComboBox;
@@ -122,20 +122,20 @@ type
     procedure ForwardBtnClick(Sender: TObject);
     procedure ReloadBtnClick(Sender: TObject);
     procedure Chromium1AfterCreated(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure Chromium1LoadingStateChange(Sender: TObject;
-      const browser: ICefBrowser; isLoading, canGoBack,
+      const browser: IOldCefBrowser; isLoading, canGoBack,
       canGoForward: Boolean);
     procedure Chromium1TitleChange(Sender: TObject;
-      const browser: ICefBrowser; const title: ustring);
+      const browser: IOldCefBrowser; const title: oldustring);
     procedure Chromium1AddressChange(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const url: ustring);
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const url: oldustring);
     procedure Chromium1BeforeContextMenu(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; const model: ICefMenuModel);
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
     procedure Chromium1StatusMessage(Sender: TObject;
-      const browser: ICefBrowser; const value: ustring);
+      const browser: IOldCefBrowser; const value: oldustring);
     procedure Chromium1TextResultAvailable(Sender: TObject;
       const aText: string);
     procedure PopupMenu1Popup(Sender: TObject);
@@ -149,25 +149,25 @@ type
     procedure Deczoom1Click(Sender: TObject);
     procedure Resetzoom1Click(Sender: TObject);
     procedure Chromium1FullScreenModeChange(Sender: TObject;
-      const browser: ICefBrowser; fullscreen: Boolean);
+      const browser: IOldCefBrowser; fullscreen: Boolean);
     procedure Chromium1PreKeyEvent(Sender: TObject;
-      const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+      const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
       out isKeyboardShortcut, Result: Boolean);
     procedure Chromium1KeyEvent(Sender: TObject;
-      const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+      const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
       out Result: Boolean);
     procedure ApplicationEvents1Message(var Msg: tagMSG;
       var Handled: Boolean);
     procedure Openfile1Click(Sender: TObject);
     procedure Chromium1ContextMenuCommand(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; commandId: Integer;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; commandId: Integer;
       eventFlags: Cardinal; out Result: Boolean);
     procedure Chromium1PdfPrintFinished(Sender: TObject;
       aResultOK: Boolean);
     procedure Chromium1ResourceResponse(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const request: ICefRequest; const response: ICefResponse;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const request: IOldCefRequest; const response: IOldCefResponse;
       out Result: Boolean);
     procedure StopBtnClick(Sender: TObject);
     procedure Resolvehost1Click(Sender: TObject);
@@ -176,23 +176,23 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure Chromium1PrefsAvailable(Sender: TObject; aResultOK: Boolean);
     procedure Chromium1BeforeDownload(Sender: TObject;
-      const browser: ICefBrowser; const downloadItem: ICefDownloadItem;
-      const suggestedName: ustring;
-      const callback: ICefBeforeDownloadCallback);
+      const browser: IOldCefBrowser; const downloadItem: IOldCefDownloadItem;
+      const suggestedName: oldustring;
+      const callback: IOldCefBeforeDownloadCallback);
     procedure Chromium1DownloadUpdated(Sender: TObject;
-      const browser: ICefBrowser; const downloadItem: ICefDownloadItem;
-      const callback: ICefDownloadItemCallback);
+      const browser: IOldCefBrowser; const downloadItem: IOldCefDownloadItem;
+      const callback: IOldCefDownloadItemCallback);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Chromium1BeforeResourceLoad(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const request: ICefRequest; const callback: ICefRequestCallback;
-      out Result: TCefReturnValue);
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const request: IOldCefRequest; const callback: IOldCefRequestCallback;
+      out Result: TOldCefReturnValue);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure Chromium1RenderCompMsg(var aMessage : TMessage; var aHandled: Boolean);
     procedure OpenfilewithaDATAURL1Click(Sender: TObject);
     procedure Memoryinfo1Click(Sender: TObject);
@@ -201,7 +201,7 @@ type
     FResponse : TStringList;
     FRequest  : TStringList;
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure AddURL(const aURL : string);
@@ -213,8 +213,8 @@ type
     procedure HandleKeyUp(const aMsg : TMsg; var aHandled : boolean);
     procedure HandleKeyDown(const aMsg : TMsg; var aHandled : boolean);
 
-    procedure InspectRequest(const aRequest : ICefRequest);
-    procedure InspectResponse(const aResponse : ICefResponse);
+    procedure InspectRequest(const aRequest : IOldCefRequest);
+    procedure InspectResponse(const aResponse : IOldCefResponse);
 
     procedure BrowserCreatedMsg(var aMessage : TMessage); message CEF_AFTERCREATED;
     procedure BrowserDestroyMsg(var aMessage : TMessage); message CEF_DESTROY;
@@ -245,13 +245,13 @@ implementation
 {$R *.dfm}
 
 uses
-  uPreferences, uCefStringMultimap, uCEFMiscFunctions, uSimpleTextViewer;
+  uPreferences, oldCEFStringMultimap, oldCEFMiscFunctions, uSimpleTextViewer;
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TChromium.CloseBrowser which triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldChromium.CloseBrowser which triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
 procedure TMiniBrowserFrm.BackBtnClick(Sender: TObject);
 begin
@@ -287,12 +287,12 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1AddressChange(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const url: ustring);
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const url: oldustring);
 begin
   if Chromium1.IsSameBrowser(browser) then AddURL(url);
 end;
 
-procedure TMiniBrowserFrm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TMiniBrowserFrm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   if Chromium1.IsSameBrowser(browser) then
     PostMessage(Handle, CEF_AFTERCREATED, 0, 0)
@@ -300,7 +300,7 @@ begin
     SendMessage(browser.Host.WindowHandle, WM_SETICON, 1, application.Icon.Handle); // Use the same icon in the popup window
 end;
 
-procedure TMiniBrowserFrm.Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TMiniBrowserFrm.Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   if (Chromium1.BrowserId = 0) then // The main browser is being destroyed
     begin
@@ -310,8 +310,8 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1BeforeContextMenu(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const params: ICefContextMenuParams; const model: ICefMenuModel);
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
 begin
   if not(Chromium1.IsSameBrowser(browser)) then exit;
 
@@ -360,9 +360,9 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1BeforeDownload(Sender: TObject;
-  const browser: ICefBrowser; const downloadItem: ICefDownloadItem;
-  const suggestedName: ustring;
-  const callback: ICefBeforeDownloadCallback);
+  const browser: IOldCefBrowser; const downloadItem: IOldCefDownloadItem;
+  const suggestedName: oldustring;
+  const callback: IOldCefBeforeDownloadCallback);
 var
   TempMyDocuments, TempFullPath, TempName : string;
 begin
@@ -387,9 +387,9 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1BeforeResourceLoad(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const request: ICefRequest; const callback: ICefRequestCallback;
-  out Result: TCefReturnValue);
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const request: IOldCefRequest; const callback: IOldCefRequestCallback;
+  out Result: TOldCefReturnValue);
 begin
   Result := RV_CONTINUE;
 
@@ -399,7 +399,7 @@ begin
     InspectRequest(request);
 end;
 
-procedure TMiniBrowserFrm.Chromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TMiniBrowserFrm.Chromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   if (browser <> nil) and (Chromium1.BrowserId = browser.Identifier) then
     begin
@@ -409,8 +409,8 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1ContextMenuCommand(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const params: ICefContextMenuParams; commandId: Integer;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const params: IOldCefContextMenuParams; commandId: Integer;
   eventFlags: Cardinal; out Result: Boolean);
 var
   TempParam : WParam;
@@ -467,8 +467,8 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1DownloadUpdated(Sender: TObject;
-  const browser: ICefBrowser; const downloadItem: ICefDownloadItem;
-  const callback: ICefDownloadItemCallback);
+  const browser: IOldCefBrowser; const downloadItem: IOldCefDownloadItem;
+  const callback: IOldCefDownloadItemCallback);
 var
   TempString : string;
 begin
@@ -492,7 +492,7 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1FullScreenModeChange(Sender: TObject;
-  const browser: ICefBrowser; fullscreen: Boolean);
+  const browser: IOldCefBrowser; fullscreen: Boolean);
 begin                    
   if not(Chromium1.IsSameBrowser(browser)) then exit;
 
@@ -527,7 +527,7 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1KeyEvent(Sender: TObject;
-  const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+  const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
   out Result: Boolean);
 var
   TempMsg : TMsg;
@@ -596,7 +596,7 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1LoadingStateChange(Sender: TObject;
-  const browser: ICefBrowser; isLoading, canGoBack, canGoForward: Boolean);
+  const browser: IOldCefBrowser; isLoading, canGoBack, canGoForward: Boolean);
 begin
   if not(Chromium1.IsSameBrowser(browser)) or FClosing then exit;
 
@@ -642,7 +642,7 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1PreKeyEvent(Sender: TObject;
-  const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+  const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
   out isKeyboardShortcut, Result: Boolean);
 begin
   Result := False;
@@ -672,16 +672,16 @@ begin
                 'Error code : ' + inttostr(result));
 end;
 
-procedure TMiniBrowserFrm.InspectRequest(const aRequest : ICefRequest);
+procedure TMiniBrowserFrm.InspectRequest(const aRequest : IOldCefRequest);
 var
-  TempHeaderMap : ICefStringMultimap;
+  TempHeaderMap : IOldCefStringMultimap;
   i, j : integer;
 begin
   if (aRequest <> nil) then
     begin
       FRequest.Clear;
 
-      TempHeaderMap := TCefStringMultimapOwn.Create;
+      TempHeaderMap := TOldCefStringMultimapOwn.Create;
       aRequest.GetHeaderMap(TempHeaderMap);
 
       i := 0;
@@ -695,16 +695,16 @@ begin
     end;
 end;
 
-procedure TMiniBrowserFrm.InspectResponse(const aResponse : ICefResponse);
+procedure TMiniBrowserFrm.InspectResponse(const aResponse : IOldCefResponse);
 var
-  TempHeaderMap : ICefStringMultimap;
+  TempHeaderMap : IOldCefStringMultimap;
   i, j : integer;
 begin
   if (aResponse <> nil) then
     begin
       FResponse.Clear;
 
-      TempHeaderMap := TCefStringMultimapOwn.Create;
+      TempHeaderMap := TOldCefStringMultimapOwn.Create;
       aResponse.GetHeaderMap(TempHeaderMap);
 
       i := 0;
@@ -724,17 +724,17 @@ const
 var
   TempMessage : string;
 begin
-  TempMessage := 'Total memory used by this application : ' + inttostr(GlobalCEFApp.UsedMemory div BYTES_PER_MEGABYTE) + ' Mb' + CRLF +
-                 'Total system memory : ' +  inttostr(GlobalCEFApp.TotalSystemMemory div BYTES_PER_MEGABYTE) + ' Mb' + CRLF +
-                 'Available physical memory : ' + inttostr(GlobalCEFApp.AvailableSystemMemory div BYTES_PER_MEGABYTE) + ' Mb' + CRLF +
-                 'Memory load : ' + inttostr(GlobalCEFApp.SystemMemoryLoad) + ' %';
+  TempMessage := 'Total memory used by this application : ' + inttostr(GlobalOldCEFApp.UsedMemory div BYTES_PER_MEGABYTE) + ' Mb' + CRLF +
+                 'Total system memory : ' +  inttostr(GlobalOldCEFApp.TotalSystemMemory div BYTES_PER_MEGABYTE) + ' Mb' + CRLF +
+                 'Available physical memory : ' + inttostr(GlobalOldCEFApp.AvailableSystemMemory div BYTES_PER_MEGABYTE) + ' Mb' + CRLF +
+                 'Memory load : ' + inttostr(GlobalOldCEFApp.SystemMemoryLoad) + ' %';
 
   MessageDlg(TempMessage, mtInformation, [mbOK], 0);
 end;
 
 procedure TMiniBrowserFrm.Chromium1ResourceResponse(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const request: ICefRequest; const response: ICefResponse;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const request: IOldCefRequest; const response: IOldCefResponse;
   out Result: Boolean);
 begin
   Result := False;
@@ -756,7 +756,7 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1StatusMessage(Sender: TObject;
-  const browser: ICefBrowser; const value: ustring);
+  const browser: IOldCefBrowser; const value: oldustring);
 begin
   if Chromium1.IsSameBrowser(browser) then ShowStatusText(value);
 end;
@@ -767,7 +767,7 @@ begin
 end;
 
 procedure TMiniBrowserFrm.Chromium1TitleChange(Sender: TObject;
-  const browser: ICefBrowser; const title: ustring);
+  const browser: IOldCefBrowser; const title: oldustring);
 begin
   if not(Chromium1.IsSameBrowser(browser)) then exit;
 
@@ -814,7 +814,7 @@ begin
   Chromium1.WebRTCMultipleRoutes   := STATE_DISABLED;
   Chromium1.WebRTCNonproxiedUDP    := STATE_DISABLED;
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1, '')) then Timer1.Enabled := True;
 end;
@@ -991,7 +991,7 @@ procedure TMiniBrowserFrm.CopyFramesIDsMsg(var aMessage : TMessage);
 var
   i          : NativeUInt;
   TempCount  : NativeUInt;
-  TempArray  : TCefFrameIdentifierArray;
+  TempArray  : TOldCefFrameIdentifierArray;
   TempString : string;
 begin
   TempCount := Chromium1.FrameCount;
@@ -1089,14 +1089,14 @@ procedure TMiniBrowserFrm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TMiniBrowserFrm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TMiniBrowserFrm.Deczoom1Click(Sender: TObject);

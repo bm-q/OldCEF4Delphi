@@ -37,7 +37,7 @@
 
 unit uJSDialogBrowser;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,14 +49,14 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, SyncObjs,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uCEFInterfaces, uCEFTypes, uCEFConstants;
+  oldCEFChromium, oldCEFWindowParent, oldCEFChromiumWindow, oldCEFInterfaces, oldCEFTypes, oldCEFConstants;
 
 const
   CEFBROWSER_SHOWJSDIALOG               = WM_APP + $101;
 
 type
   TJSDialogBrowserFrm = class(TForm)
-    ChromiumWindow1: TChromiumWindow;
+    ChromiumWindow1: TOldChromiumWindow;
     AddressPnl: TPanel;
     AddressEdt: TEdit;
     GoBtn: TButton;
@@ -73,19 +73,19 @@ type
 
   protected
     FJSDialogInfoCS    : TCriticalSection;
-    FOriginUrl         : ustring;
-    FMessageText       : ustring;
-    FDefaultPromptText : ustring;
+    FOriginUrl         : oldustring;
+    FMessageText       : oldustring;
+    FDefaultPromptText : oldustring;
     FPendingDlg        : boolean;
-    FDialogType        : TCefJsDialogType;
-    FCallback          : ICefJsDialogCallback;
+    FDialogType        : TOldCefJsDialogType;
+    FCallback          : IOldCefJsDialogCallback;
 
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
-    procedure Chromium_OnJsdialog(Sender: TObject; const browser: ICefBrowser; const originUrl, accept_lang: ustring; dialogType: TCefJsDialogType; const messageText, defaultPromptText: ustring; const callback: ICefJsDialogCallback; out suppressMessage: Boolean; out Result: Boolean);
-    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
+    procedure Chromium_OnJsdialog(Sender: TObject; const browser: IOldCefBrowser; const originUrl, accept_lang: oldustring; dialogType: TOldCefJsDialogType; const messageText, defaultPromptText: oldustring; const callback: IOldCefJsDialogCallback; out suppressMessage: Boolean; out Result: Boolean);
+    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
 
     procedure WMMove(var aMessage : TWMMove); message WM_MOVE;
     procedure WMMoving(var aMessage : TMessage); message WM_MOVING;
@@ -103,15 +103,15 @@ implementation
 {$R *.dfm}
 
 uses
-  uCEFApplication;
+  oldCEFApplication;
 
 // This is a demo with custom JS dialogs
 
 // Destruction steps
 // =================
-// 1. The FormCloseQuery event sets CanClose to False and calls TChromiumWindow.CloseBrowser, which triggers the TChromiumWindow.OnClose event.
-// 2. The TChromiumWindow.OnClose event calls TChromiumWindow.DestroyChildWindow which triggers the TChromiumWindow.OnBeforeClose event.
-// 3. TChromiumWindow.OnBeforeClose sets FCanClose to True and closes the form.
+// 1. The FormCloseQuery event sets CanClose to False and calls TOldChromiumWindow.CloseBrowser, which triggers the TOldChromiumWindow.OnClose event.
+// 2. The TOldChromiumWindow.OnClose event calls TOldChromiumWindow.DestroyChildWindow which triggers the TOldChromiumWindow.OnBeforeClose event.
+// 3. TOldChromiumWindow.OnBeforeClose sets FCanClose to True and closes the form.
 
 procedure TJSDialogBrowserFrm.FormCreate(Sender: TObject);
 begin
@@ -149,7 +149,7 @@ begin
   ChromiumWindow1.ChromiumBrowser.OnJsdialog    := Chromium_OnJsdialog;
   ChromiumWindow1.ChromiumBrowser.OnBeforePopup := Chromium_OnBeforePopup;
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(ChromiumWindow1.CreateBrowser) then Timer1.Enabled := True;
 end;
@@ -191,24 +191,24 @@ procedure TJSDialogBrowserFrm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TJSDialogBrowserFrm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TJSDialogBrowserFrm.Chromium_OnJsdialog(Sender : TObject;
-                                                  const browser           : ICefBrowser;
-                                                  const originUrl         : ustring;
-                                                  const accept_lang       : ustring;
-                                                        dialogType        : TCefJsDialogType;
-                                                  const messageText       : ustring;
-                                                  const defaultPromptText : ustring;
-                                                  const callback          : ICefJsDialogCallback;
+                                                  const browser           : IOldCefBrowser;
+                                                  const originUrl         : oldustring;
+                                                  const accept_lang       : oldustring;
+                                                        dialogType        : TOldCefJsDialogType;
+                                                  const messageText       : oldustring;
+                                                  const defaultPromptText : oldustring;
+                                                  const callback          : IOldCefJsDialogCallback;
                                                   out   suppressMessage   : Boolean;
                                                   out   Result            : Boolean);
 begin
@@ -254,11 +254,11 @@ begin
 end;
 
 procedure TJSDialogBrowserFrm.Chromium_OnBeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs

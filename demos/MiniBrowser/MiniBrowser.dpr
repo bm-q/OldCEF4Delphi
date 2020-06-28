@@ -48,7 +48,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uMiniBrowser in 'uMiniBrowser.pas' {MiniBrowserFrm},
   uPreferences in 'uPreferences.pas' {PreferencesFrm},
   uSimpleTextViewer in 'uSimpleTextViewer.pas' {SimpleTextViewerFrm};
@@ -58,9 +58,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -72,5 +72,5 @@ begin
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

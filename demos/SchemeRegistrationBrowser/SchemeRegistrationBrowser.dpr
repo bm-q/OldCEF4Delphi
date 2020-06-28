@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uSchemeRegistrationBrowser in 'uSchemeRegistrationBrowser.pas' {SchemeRegistrationBrowserFrm},
   uHelloScheme in 'uHelloScheme.pas';
 
@@ -56,9 +56,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.MainFormOnTaskbar := True;
@@ -66,5 +66,5 @@ begin
       Application.Run;
     end;
 
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

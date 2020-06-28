@@ -18,7 +18,7 @@ object ChildForm: TChildForm
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 0
     Width = 352
@@ -26,7 +26,7 @@ object ChildForm: TChildForm
     Align = alClient
     TabOrder = 0
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnTitleChange = Chromium1TitleChange
     OnBeforePopup = Chromium1BeforePopup
     OnBeforeClose = Chromium1BeforeClose

@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF}
-  uCEFApplication,
+  oldCefApplication,
   uKioskOSRBrowser in 'uKioskOSRBrowser.pas' {Form1};
 
 {$R *.res}
@@ -55,11 +55,11 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  // GlobalCEFApp creation and initialization moved to a different unit to fix the memory leak described in the bug #89
+  // GlobalOldCEFApp creation and initialization moved to a different unit to fix the memory leak described in the bug #89
   // https://github.com/salvadordf/CEF4Delphi/issues/89
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -69,5 +69,5 @@ begin
       Application.Run;
     end;
 
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

@@ -37,7 +37,7 @@
 
 unit uJSEval;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -50,7 +50,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Menus,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Types, ComCtrls, ClipBrd, EncdDecd,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFApplication, oldCEFTypes, oldCEFConstants;
 
 const
   MINIBROWSER_SHOWTEXTVIEWER = WM_APP + $101;
@@ -65,39 +65,39 @@ const
 
 type
   TJSEvalFrm = class(TForm)
-    CEFWindowParent1: TCEFWindowParent;
-    Chromium1: TChromium;
+    CEFWindowParent1: TOldCefWindowParent;
+    Chromium1: TOldChromium;
     AddressBarPnl: TPanel;
     GoBtn: TButton;
     AddressEdt: TEdit;
     Timer1: TTimer;
-    procedure Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+    procedure Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
     procedure GoBtnClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
 
     procedure Chromium1ProcessMessageReceived(Sender: TObject;
-      const browser: ICefBrowser; sourceProcess: TCefProcessId;
-      const message: ICefProcessMessage; out Result: Boolean);
+      const browser: IOldCefBrowser; sourceProcess: TOldCefProcessId;
+      const message: IOldCefProcessMessage; out Result: Boolean);
     procedure Chromium1BeforeContextMenu(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; const model: ICefMenuModel);
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
     procedure Chromium1ContextMenuCommand(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; commandId: Integer;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; commandId: Integer;
       eventFlags: Cardinal; out Result: Boolean);
     procedure Timer1Timer(Sender: TObject);
     procedure Chromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo;
-      var client: ICefClient; var settings: TCefBrowserSettings;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo;
+      var client: IOldCefClient; var settings: TOldCefBrowserSettings;
       var noJavascriptAccess: Boolean; var Result: Boolean);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
 
   private
     { Private declarations }
@@ -105,7 +105,7 @@ type
   protected
     FText : string;
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure BrowserCreatedMsg(var aMessage : TMessage); message CEF_AFTERCREATED;
@@ -125,20 +125,20 @@ type
 var
   JSEvalFrm: TJSEvalFrm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  uSimpleTextViewer, uCefProcessMessage, uCefBinaryValue, uCefMiscFunctions;
+  uSimpleTextViewer, oldCEFProcessMessage, oldCEFBinaryValue, oldCEFMiscFunctions;
 
 // 99.9% of the code in this demo was created by xpert13 and shared in the CEF4Delphi forum.
 
 // Steps to evaluate some JavaScript code using the V8Context
 // ----------------------------------------------------------
-// 1. Set GlobalCEFApp.OnProcessMessageReceived to RenderProcessHandler_OnProcessMessageReceivedEvent in the DPR file.
+// 1. Set GlobalOldCEFApp.OnProcessMessageReceived to RenderProcessHandler_OnProcessMessageReceivedEvent in the DPR file.
 // 2. To get the Javascript code in this demo we use a context menu that sends a MINIBROWSER_EVALJSCODE to the form.
 // 3. The EvalJSCodeMsg asks for the Javascript code and sends it to the renderer using a process message.
 // 4. RenderProcessHandler_OnProcessMessageReceivedEvent receives the process message and calls ParseEvalJsAnswer
@@ -152,9 +152,9 @@ uses
 
 // This demo also has an example of binary parameters in process messages
 // ----------------------------------------------------------------------
-// 1. Set GlobalCEFApp.OnProcessMessageReceived to RenderProcessHandler_OnProcessMessageReceivedEvent in the DPR file.
+// 1. Set GlobalOldCEFApp.OnProcessMessageReceived to RenderProcessHandler_OnProcessMessageReceivedEvent in the DPR file.
 // 2. The context menu has a 'Send JPEG image' option that sends a MINIBROWSER_JSBINPARAM message to the form.
-// 3. EvalJSBinParamMsg asks for a JPEG image and sends a process message with a ICefBinaryValue parameter to the
+// 3. EvalJSBinParamMsg asks for a JPEG image and sends a process message with a IOldCefBinaryValue parameter to the
 //    renderer process.
 // 4. The renderer process parses the binary parameter in the ParseBinaryValue function and sends back the image
 //    size and encoded image data to the browser process.
@@ -174,22 +174,22 @@ uses
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TChromium.CloseBrowser which triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldChromium.CloseBrowser which triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
 
 
-procedure ParseEvalJsAnswer(const pMessage     : ICefProcessMessage;
-                                  pBrowser     : ICefBrowser;
-                                  pReturnValue : ICefv8Value;
-                                  pException   : ICefV8Exception);
+procedure ParseEvalJsAnswer(const pMessage     : IOldCefProcessMessage;
+                                  pBrowser     : IOldCefBrowser;
+                                  pReturnValue : IOldCefv8Value;
+                                  pException   : IOldCefV8Exception);
 var
-  pAnswer       : ICefProcessMessage;
+  pAnswer       : IOldCefProcessMessage;
   strResult     : String;
   bGoodDataType : Boolean;
 begin
-  pAnswer := TCefProcessMessageRef.New(EVAL_JS);
+  pAnswer := TOldCefProcessMessageRef.New(EVAL_JS);
 
   if (pReturnValue = nil) or not(pReturnValue.IsValid) then
     begin
@@ -222,9 +222,9 @@ begin
   pBrowser.SendProcessMessage(PID_BROWSER, pAnswer);
 end;
 
-procedure ParseBinaryValue(const pBrowser : ICefBrowser; const aBinaryValue : ICefBinaryValue);
+procedure ParseBinaryValue(const pBrowser : IOldCefBrowser; const aBinaryValue : IOldCefBinaryValue);
 var
-  pAnswer     : ICefProcessMessage;
+  pAnswer     : IOldCefProcessMessage;
   TempBuffer  : TBytes;
   TempPointer : pointer;
   TempSize    : NativeUInt;
@@ -244,7 +244,7 @@ begin
 
           if (TempSize > 0) then
             begin
-              pAnswer    := TCefProcessMessageRef.New(BINARY_PARAM_JS);
+              pAnswer    := TOldCefProcessMessageRef.New(BINARY_PARAM_JS);
               TempString := 'Image size : ' + inttostr(TempSize) + #13 + #10 +
                             'Encoded image : ' + EncodeBase64(TempPointer, TempSize);
 
@@ -261,16 +261,16 @@ begin
   end;
 end;
 
-procedure RenderProcessHandler_OnProcessMessageReceivedEvent(const pBrowser       : ICefBrowser;
-                                                                   uSourceProcess : TCefProcessId;
-                                                             const pMessage       : ICefProcessMessage;
+procedure RenderProcessHandler_OnProcessMessageReceivedEvent(const pBrowser       : IOldCefBrowser;
+                                                                   uSourceProcess : TOldCefProcessId;
+                                                             const pMessage       : IOldCefProcessMessage;
                                                              var   aHandled       : boolean);
 var
-  pV8Context   : ICefv8Context;
-  pReturnValue : ICefv8Value;
-  pException   : ICefV8Exception;
+  pV8Context   : IOldCefv8Context;
+  pReturnValue : IOldCefv8Value;
+  pException   : IOldCefV8Exception;
   TempScript   : string;
-  TempBinValue : ICefBinaryValue;
+  TempBinValue : IOldCefBinaryValue;
 begin
   aHandled := False;
 
@@ -303,40 +303,40 @@ begin
       end;
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  GlobalCEFApp                          := TCefApplication.Create;
-  GlobalCEFApp.OnProcessMessageReceived := RenderProcessHandler_OnProcessMessageReceivedEvent;
+  GlobalOldCEFApp                          := TOldCefApplication.Create;
+  GlobalOldCEFApp.OnProcessMessageReceived := RenderProcessHandler_OnProcessMessageReceivedEvent;
 end;
 
-procedure TJSEvalFrm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TJSEvalFrm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   PostMessage(Handle, CEF_AFTERCREATED, 0, 0);
 end;
 
 procedure TJSEvalFrm.Chromium1BeforeClose(Sender: TObject;
-  const browser: ICefBrowser);
+  const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TJSEvalFrm.Chromium1BeforeContextMenu(Sender : TObject;
-                                                const browser : ICefBrowser;
-                                                const frame   : ICefFrame;
-                                                const params  : ICefContextMenuParams;
-                                                const model   : ICefMenuModel);
+                                                const browser : IOldCefBrowser;
+                                                const frame   : IOldCefFrame;
+                                                const params  : IOldCefContextMenuParams;
+                                                const model   : IOldCefMenuModel);
 begin
   model.AddItem(MINIBROWSER_CONTEXTMENU_EVALJSCODE, 'Evaluate JavaScript code...');
   model.AddItem(MINIBROWSER_CONTEXTMENU_JSBINPARAM, 'Send JPEG image...');
 end;
 
 procedure TJSEvalFrm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
@@ -344,16 +344,16 @@ begin
 end;
 
 procedure TJSEvalFrm.Chromium1Close(Sender: TObject;
-  const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+  const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEF_DESTROY, 0, 0);
   aAction := cbaDelay;
 end;
 
 procedure TJSEvalFrm.Chromium1ContextMenuCommand(Sender : TObject;
-                                                 const browser    : ICefBrowser;
-                                                 const frame      : ICefFrame;
-                                                 const params     : ICefContextMenuParams;
+                                                 const browser    : IOldCefBrowser;
+                                                 const frame      : IOldCefFrame;
+                                                 const params     : IOldCefContextMenuParams;
                                                        commandId  : Integer;
                                                        eventFlags : Cardinal;
                                                  out   Result     : Boolean);
@@ -380,7 +380,7 @@ end;
 
 procedure TJSEvalFrm.FormShow(Sender: TObject);
 begin
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1, '')) then Timer1.Enabled := True;
 end;
@@ -433,26 +433,26 @@ procedure TJSEvalFrm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TJSEvalFrm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TJSEvalFrm.EvalJSCodeMsg(var aMessage : TMessage);
 var
-  TempMsg    : ICefProcessMessage;
+  TempMsg    : IOldCefProcessMessage;
   TempScript : string;
 begin
   TempScript := InputBox('JSEval demo', 'Please type some JavaScript code', 'document.title;');
 
   if (length(TempScript) > 0) then
     begin
-      TempMsg := TCefProcessMessageRef.New(EVAL_JS);
+      TempMsg := TOldCefProcessMessageRef.New(EVAL_JS);
 
       if TempMsg.ArgumentList.SetString(0, TempScript) then
         Chromium1.SendProcessMessage(PID_RENDERER, TempMsg);
@@ -461,10 +461,10 @@ end;
 
 procedure TJSEvalFrm.EvalJSBinParamMsg(var aMessage : TMessage);
 var
-  TempMsg        : ICefProcessMessage;
+  TempMsg        : IOldCefProcessMessage;
   TempOpenDialog : TOpenDialog;
   TempStream     : TFileStream;
-  TempBinValue   : ICefBinaryValue;
+  TempBinValue   : IOldCefBinaryValue;
   TempBuffer     : TBytes;
   TempSize       : NativeUInt;
   TempPointer    : pointer;
@@ -490,8 +490,8 @@ begin
               if (TempSize > 0) then
                 begin
                   TempPointer  := @TempBuffer[0];
-                  TempBinValue := TCefBinaryValueRef.New(TempPointer, TempSize);
-                  TempMsg      := TCefProcessMessageRef.New(BINARY_PARAM_JS);
+                  TempBinValue := TOldCefBinaryValueRef.New(TempPointer, TempSize);
+                  TempMsg      := TOldCefProcessMessageRef.New(BINARY_PARAM_JS);
 
                   if TempMsg.ArgumentList.SetBinary(0, TempBinValue) then
                     Chromium1.SendProcessMessage(PID_RENDERER, TempMsg);
@@ -510,9 +510,9 @@ begin
 end;
 
 procedure TJSEvalFrm.Chromium1ProcessMessageReceived(Sender : TObject;
-                                                     const browser       : ICefBrowser;
-                                                           sourceProcess : TCefProcessId;
-                                                     const message       : ICefProcessMessage;
+                                                     const browser       : IOldCefBrowser;
+                                                           sourceProcess : TOldCefProcessId;
+                                                     const message       : IOldCefProcessMessage;
                                                      out   Result        : Boolean);
 begin
   Result := False;

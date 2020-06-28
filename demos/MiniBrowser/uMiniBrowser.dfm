@@ -215,7 +215,7 @@ object MiniBrowserFrm: TMiniBrowserFrm
       end
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 41
     Width = 1179
@@ -224,7 +224,7 @@ object MiniBrowserFrm: TMiniBrowserFrm
     TabStop = True
     TabOrder = 0
   end
-  object DevTools: TCEFWindowParent
+  object DevTools: TOldCefWindowParent
     Left = 1184
     Top = 41
     Width = 0
@@ -252,7 +252,7 @@ object MiniBrowserFrm: TMiniBrowserFrm
         Width = 100
       end>
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnTextResultAvailable = Chromium1TextResultAvailable
     OnPdfPrintFinished = Chromium1PdfPrintFinished
     OnPrefsAvailable = Chromium1PrefsAvailable

@@ -59,7 +59,7 @@ object URLRequestFrm: TURLRequestFrm
     Left = 384
     Top = 64
   end
-  object CEFUrlRequestClientComponent1: TCEFUrlRequestClientComponent
+  object CEFUrlRequestClientComponent1: TOldCEFUrlRequestClientComponent
     OnRequestComplete = CEFUrlRequestClientComponent1RequestComplete
     OnDownloadProgress = CEFUrlRequestClientComponent1DownloadProgress
     OnDownloadData = CEFUrlRequestClientComponent1DownloadData

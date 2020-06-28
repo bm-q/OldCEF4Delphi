@@ -48,7 +48,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, ComCtrls, StdCtrls,
   {$ENDIF}
-  uCEFInterfaces, uCEFUrlRequestClientComponent;
+  oldCEFInterfaces, oldCEFUrlRequestClientComponent;
 
 const
   URLREQUEST_SUCCESS    = WM_APP + $101;
@@ -61,7 +61,7 @@ type
     DownloadBtn: TButton;
     StatusBar1: TStatusBar;
     SaveDialog1: TSaveDialog;
-    CEFUrlRequestClientComponent1: TCEFUrlRequestClientComponent;
+    CEFUrlRequestClientComponent1: TOldCefUrlRequestClientComponent;
 
     procedure DownloadBtnClick(Sender: TObject);
 
@@ -69,9 +69,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 
-    procedure CEFUrlRequestClientComponent1DownloadData(Sender: TObject; const request: ICefUrlRequest; data: Pointer; dataLength: NativeUInt);
-    procedure CEFUrlRequestClientComponent1DownloadProgress(Sender: TObject; const request: ICefUrlRequest; current, total: Int64);
-    procedure CEFUrlRequestClientComponent1RequestComplete(Sender: TObject; const request: ICefUrlRequest);
+    procedure CEFUrlRequestClientComponent1DownloadData(Sender: TObject; const request: IOldCefUrlRequest; data: Pointer; dataLength: NativeUInt);
+    procedure CEFUrlRequestClientComponent1DownloadProgress(Sender: TObject; const request: IOldCefUrlRequest; current, total: Int64);
+    procedure CEFUrlRequestClientComponent1RequestComplete(Sender: TObject; const request: IOldCefUrlRequest);
     procedure CEFUrlRequestClientComponent1CreateURLRequest(Sender: TObject);
   private
     FStream         : TMemoryStream;
@@ -93,10 +93,10 @@ implementation
 
 {$R *.dfm}
 
-// This is a simple URL request example to download small files using TCEFUrlRequestClientComponent.
+// This is a simple URL request example to download small files using TOldCefUrlRequestClientComponent.
 // WARNING : If you try to download big files you may get an "Out of memory" exception. Replace TMemoryStream in that case.
 
-// All TCEFUrlRequestClientComponent events are executed in a different thread. Don't create or destroy VCL componets
+// All TOldCefUrlRequestClientComponent events are executed in a different thread. Don't create or destroy VCL componets
 // inside them.
 
 // To keep this demo as simple as possible, it's only allowed to download one file at a time. You can add as many requests
@@ -106,17 +106,17 @@ implementation
 // This demo follows this destruction sequence in case there is a file download running :
 // --------------------------------------------------------------------------------------
 // 1- Set CanClose to FALSE in the TForm.OnCloseQuery event and set FClosing to TRUE.
-// 2- The next time TCEFUrlRequestClientComponent.OnDownloadProgress is executed we call request.Cancel, which triggers the
-//    TCEFUrlRequestClientComponent.OnRequestComplete event.
-// 3- in the TCEFUrlRequestClientComponent.OnRequestComplete event we set FCanClose to TRUE and send WM_CLOSE to the form.
+// 2- The next time TOldCefUrlRequestClientComponent.OnDownloadProgress is executed we call request.Cancel, which triggers the
+//    TOldCefUrlRequestClientComponent.OnRequestComplete event.
+// 3- in the TOldCefUrlRequestClientComponent.OnRequestComplete event we set FCanClose to TRUE and send WM_CLOSE to the form.
 
 uses
-  uCEFMiscFunctions, uCEFTypes, uCEFUrlRequest, uCEFRequest, uCEFPostData, uCEFPostDataElement;
+  oldCEFMiscFunctions, oldCEFTypes, oldCEFUrlRequest, oldCEFRequest, oldCEFPostData, oldCEFPostDataElement;
 
 procedure TURLRequestFrm.DownloadBtnClick(Sender: TObject);
 var
   TempURL, TempPath, TempName : string;
-  TempParts : TUrlParts;
+  TempParts : TOldUrlParts;
   i : integer;
 begin
   TempURL := trim(Edit1.Text);
@@ -150,8 +150,8 @@ begin
           StatusBar1.Panels[0].Text := 'Downloading...';
           FStream.Clear;
 
-          // TCEFUrlRequestClientComponent.AddURLRequest will trigger the
-          // TCEFUrlRequestClientComponent.OnCreateURLRequest event in the right
+          // TOldCefUrlRequestClientComponent.AddURLRequest will trigger the
+          // TOldCefUrlRequestClientComponent.OnCreateURLRequest event in the right
           // thread where you can create your custom requests.
           CEFUrlRequestClientComponent1.AddURLRequest;
         end;
@@ -179,9 +179,9 @@ end;
 
 procedure TURLRequestFrm.CEFUrlRequestClientComponent1CreateURLRequest(Sender: TObject);
 var
-  TempRequest  : ICefRequest;
-  // TempPostData : ICefPostData;
-  // TempElement  : ICefPostDataElement;
+  TempRequest  : IOldCefRequest;
+  // TempPostData : IOldCefPostData;
+  // TempElement  : IOldCefPostDataElement;
 begin
   try
     if (length(FPendingURL) > 0) then
@@ -190,34 +190,34 @@ begin
 
         // GET request example
         // -------------------
-        TempRequest        := TCefRequestRef.New;
+        TempRequest        := TOldCefRequestRef.New;
         TempRequest.URL    := FPendingURL;
         TempRequest.Method := 'GET';
 
         // POST request example
         // --------------------
-        // TempElement             := TCefPostDataElementOwn.Create(True);
+        // TempElement             := TOldCefPostDataElementOwn.Create(True);
         // TempElement.SetToFile('c:\myfile.txt');
         //
-        // TempPostData            := TCefPostDataRef.New;
+        // TempPostData            := TOldCefPostDataRef.New;
         // TempPostData.AddElement := TempElement;
         //
-        // TempRequest             := TCefRequestRef.New;
+        // TempRequest             := TOldCefRequestRef.New;
         // TempRequest.URL         := FPendingURL;
         // TempRequest.Method      := 'POST';
         // TempRequest.PostData    := TempPostData;
 
-        // Set the "client" parameter to the TCEFUrlRequestClientComponent.Client property
-        // to use the TCEFUrlRequestClientComponent events.
+        // Set the "client" parameter to the TOldCefUrlRequestClientComponent.Client property
+        // to use the TOldCefUrlRequestClientComponent events.
         // The "requestContext" parameter can be nil to use the global request context.
-        TCefUrlRequestRef.New(TempRequest, CEFUrlRequestClientComponent1.Client, nil);
+        TOldCefUrlRequestRef.New(TempRequest, CEFUrlRequestClientComponent1.Client, nil);
       end;
   finally
     TempRequest := nil;
   end;
 end;
 
-procedure TURLRequestFrm.CEFUrlRequestClientComponent1DownloadData(Sender: TObject; const request: ICefUrlRequest; data: Pointer; dataLength: NativeUInt);
+procedure TURLRequestFrm.CEFUrlRequestClientComponent1DownloadData(Sender: TObject; const request: IOldCefUrlRequest; data: Pointer; dataLength: NativeUInt);
 begin
   try
     if FClosing then
@@ -231,7 +231,7 @@ begin
   end;
 end;
 
-procedure TURLRequestFrm.CEFUrlRequestClientComponent1DownloadProgress(Sender: TObject; const request: ICefUrlRequest; current, total: Int64);
+procedure TURLRequestFrm.CEFUrlRequestClientComponent1DownloadProgress(Sender: TObject; const request: IOldCefUrlRequest; current, total: Int64);
 begin
   if FClosing then
     request.Cancel
@@ -242,11 +242,11 @@ begin
       StatusBar1.Panels[0].Text := 'Downloading : ' + inttostr(current) + ' bytes';
 end;
 
-procedure TURLRequestFrm.CEFUrlRequestClientComponent1RequestComplete(Sender: TObject; const request: ICefUrlRequest);
+procedure TURLRequestFrm.CEFUrlRequestClientComponent1RequestComplete(Sender: TObject; const request: IOldCefUrlRequest);
 begin
   FDownloading := False;
 
-  // Use request.response here to get a ICefResponse interface with all the response headers, status, error code, etc.
+  // Use request.response here to get a IOldCefResponse interface with all the response headers, status, error code, etc.
 
   if FClosing then
     begin

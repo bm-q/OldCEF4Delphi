@@ -49,8 +49,8 @@ uses
   Windows,
   SysUtils,
   {$ENDIF }
-  uCEFApplication,
-  uCEFWorkScheduler,
+  oldCefApplication,
+  oldCefWorkScheduler,
   uSimpleExternalPumpBrowser in 'uSimpleExternalPumpBrowser.pas' {SimpleExternalPumpBrowserFrm};
 
 {$R *.res}
@@ -60,15 +60,15 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  // GlobalCEFWorkScheduler needs to be created before the
-  // GlobalCEFApp.StartMainProcess call.
-  GlobalCEFWorkScheduler := TCEFWorkScheduler.Create(nil);
+  // GlobalOldCEFWorkScheduler needs to be created before the
+  // GlobalOldCEFApp.StartMainProcess call.
+  GlobalOldCEFWorkScheduler := TOldCefWorkScheduler.Create(nil);
 
-  GlobalCEFApp                           := TCefApplication.Create;
-  GlobalCEFApp.FlashEnabled              := False;
-  GlobalCEFApp.MultiThreadedMessageLoop  := False;
+  GlobalOldCEFApp                           := TOldCefApplication.Create;
+  GlobalOldCEFApp.FlashEnabled              := False;
+  GlobalOldCEFApp.MultiThreadedMessageLoop  := False;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -80,9 +80,9 @@ begin
       // The form needs to be destroyed *BEFORE* stopping the scheduler.
       SimpleExternalPumpBrowserFrm.Free;
 
-      GlobalCEFWorkScheduler.StopScheduler;
+      GlobalOldCEFWorkScheduler.StopScheduler;
     end;
 
-  FreeAndNil(GlobalCEFApp);
-  FreeAndNil(GlobalCEFWorkScheduler);
+  FreeAndNil(GlobalOldCEFApp);
+  FreeAndNil(GlobalOldCEFWorkScheduler);
 end.

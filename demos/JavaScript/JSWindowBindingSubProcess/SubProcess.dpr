@@ -45,29 +45,29 @@ uses
   {$ELSE}
   Windows,
   {$ENDIF}
-  uCEFApplication,
-  uCEFConstants,
-  uCEFv8Value,
-  uCEFInterfaces;
+  oldCefApplication,
+  oldCefConstants,
+  oldCefv8Value,
+  oldCefInterfaces;
 
 // CEF3 needs to set the LARGEADDRESSAWARE flag which allows 32-bit processes to use up to 3GB of RAM.
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
-procedure GlobalCEFApp_OnContextCreated(const browser: ICefBrowser; const frame: ICefFrame; const context: ICefv8Context);
+procedure GlobalOldCEFApp_OnContextCreated(const browser: IOldCefBrowser; const frame: IOldCefFrame; const context: IOldCefv8Context);
 var
-  TempValue : ICEFv8Value;
+  TempValue : IOldCefv8Value;
 begin
   // This is the first JS Window Binding example in the "JavaScript Integration" wiki page at
   // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
 
-  TempValue := TCefv8ValueRef.NewString('My Value!');
+  TempValue := TOldCefv8ValueRef.NewString('My Value!');
 
   context.Global.SetValueByKey('myval', TempValue, V8_PROPERTY_ATTRIBUTE_NONE);
 end;
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
-  GlobalCEFApp.OnContextCreated := GlobalCEFApp_OnContextCreated;
+  GlobalOldCEFApp := TOldCefApplication.Create;
+  GlobalOldCEFApp.OnContextCreated := GlobalOldCEFApp_OnContextCreated;
 
   // The main process and the subprocess *MUST* have the same FrameworkDirPath, ResourcesDirPath,
   // LocalesDirPath, cache, cookies and UserDataPath paths
@@ -77,15 +77,15 @@ begin
 
   // In case you want to use custom directories for the CEF3 binaries, cache, cookies and user data.
 {
-  GlobalCEFApp.FrameworkDirPath     := 'cef';
-  GlobalCEFApp.ResourcesDirPath     := 'cef';
-  GlobalCEFApp.LocalesDirPath       := 'cef\locales';
-  GlobalCEFApp.cache                := 'cef\cache';
-  GlobalCEFApp.cookies              := 'cef\cookies';
-  GlobalCEFApp.UserDataPath         := 'cef\User Data';
+  GlobalOldCEFApp.FrameworkDirPath     := 'cef';
+  GlobalOldCEFApp.ResourcesDirPath     := 'cef';
+  GlobalOldCEFApp.LocalesDirPath       := 'cef\locales';
+  GlobalOldCEFApp.cache                := 'cef\cache';
+  GlobalOldCEFApp.cookies              := 'cef\cookies';
+  GlobalOldCEFApp.UserDataPath         := 'cef\User Data';
 }
 
-  GlobalCEFApp.StartSubProcess;
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.StartSubProcess;
+  GlobalOldCEFApp.Free;
 end.
 

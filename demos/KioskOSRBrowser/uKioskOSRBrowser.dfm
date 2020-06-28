@@ -22,7 +22,7 @@ object Form1: TForm1
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TBufferPanel
+  object Panel1: TOldBufferPanel
     Left = 0
     Top = 0
     Width = 1004
@@ -51,7 +51,7 @@ object Form1: TForm1
     Layout = 'Standard'
     Visible = False
   end
-  object chrmosr: TChromium
+  object chrmosr: TOldChromium
     OnProcessMessageReceived = chrmosrProcessMessageReceived
     OnBeforeContextMenu = chrmosrBeforeContextMenu
     OnContextMenuCommand = chrmosrContextMenuCommand

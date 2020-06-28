@@ -17,13 +17,15 @@ object DOMVisitorFrm: TDOMVisitorFrm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCEFWindowParent
     Left = 0
     Top = 30
     Width = 878
     Height = 530
     Align = alClient
     TabOrder = 0
+    ExplicitLeft = -8
+    ExplicitTop = 31
   end
   object AddressBarPnl: TPanel
     Left = 0
@@ -92,7 +94,7 @@ object DOMVisitorFrm: TDOMVisitorFrm
         Width = 50
       end>
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnProcessMessageReceived = Chromium1ProcessMessageReceived
     OnBeforeContextMenu = Chromium1BeforeContextMenu
     OnContextMenuCommand = Chromium1ContextMenuCommand

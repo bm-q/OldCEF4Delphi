@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uMainForm in 'uMainForm.pas' {MainForm};
 
 {$R *.res}
@@ -55,9 +55,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -67,5 +67,5 @@ begin
       Application.Run;
     end;
 
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

@@ -37,7 +37,7 @@
 
 unit uSimpleExternalPumpBrowser;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,8 +49,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFTypes, uCEFConstants, uCEFInterfaces, uCEFWorkScheduler,
-  uCEFChromiumWindow;
+  oldCEFChromium, oldCEFWindowParent, oldCEFTypes, oldCEFConstants, oldCEFInterfaces, oldCEFWorkScheduler,
+  oldCEFChromiumWindow;
 
 type
   TSimpleExternalPumpBrowserFrm = class(TForm)
@@ -58,7 +58,7 @@ type
     GoBtn: TButton;
     Timer1: TTimer;
     URLCbx: TComboBox;
-    ChromiumWindow1: TChromiumWindow;
+    ChromiumWindow1: TOldChromiumWindow;
 
     procedure GoBtnClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -67,11 +67,11 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 
-    // These 3 TChromiumWindow events are called in the main app thread, so you can do whatever you want with the GUI.
+    // These 3 TOldChromiumWindow events are called in the main app thread, so you can do whatever you want with the GUI.
     procedure ChromiumWindow1AfterCreated(Sender: TObject);
     procedure ChromiumWindow1BeforeClose(Sender: TObject);
     procedure ChromiumWindow1Close(Sender: TObject);
-    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
+    procedure Chromium_OnBeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
 
   protected
     FCanClose : boolean;
@@ -91,15 +91,15 @@ implementation
 {$R *.dfm}
 
 uses
-  uCEFApplication;
+  oldCEFApplication;
 
-// This demo has a simple browser with a TChromiumWindow using the "External message pump" mode
-// to schedule the cef_do_message_loop_work calls thanks to the TCEFWorkScheduler class.
+// This demo has a simple browser with a TOldChromiumWindow using the "External message pump" mode
+// to schedule the cef_do_message_loop_work calls thanks to the TOldCefWorkScheduler class.
 
 // It was necessary to destroy the browser with the following destruction sequence :
-// 1. The FormCloseQuery event sets CanClose to False and calls TChromiumWindow.CloseBrowser, which triggers the TChromiumWindow.OnClose event.
-// 2. The TChromiumWindow.OnClose event calls TChromiumWindow.DestroyChildWindow which triggers the TChromiumWindow.OnBeforeClose event.
-// 3. TChromiumWindow.OnBeforeClose sets FCanClose to True and closes the form.
+// 1. The FormCloseQuery event sets CanClose to False and calls TOldChromiumWindow.CloseBrowser, which triggers the TOldChromiumWindow.OnClose event.
+// 2. The TOldChromiumWindow.OnClose event calls TOldChromiumWindow.DestroyChildWindow which triggers the TOldChromiumWindow.OnBeforeClose event.
+// 3. TOldChromiumWindow.OnBeforeClose sets FCanClose to True and closes the form.
 
 procedure TSimpleExternalPumpBrowserFrm.FormCreate(Sender: TObject);
 begin
@@ -125,17 +125,17 @@ begin
   // For simplicity, this demo blocks all popup windows and new tabs
   ChromiumWindow1.ChromiumBrowser.OnBeforePopup := Chromium_OnBeforePopup;
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(ChromiumWindow1.CreateBrowser) then Timer1.Enabled := True;
 end;
 
 procedure TSimpleExternalPumpBrowserFrm.Chromium_OnBeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
@@ -195,14 +195,14 @@ procedure TSimpleExternalPumpBrowserFrm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TSimpleExternalPumpBrowserFrm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 end.

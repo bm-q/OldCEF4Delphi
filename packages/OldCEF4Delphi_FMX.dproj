@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{2F51F1BD-0529-4B4A-BFD2-86FE96910A62}</ProjectGuid>
         <MainSource>OldCEF4Delphi_FMX.dpk</MainSource>
-        <ProjectVersion>18.5</ProjectVersion>
+        <ProjectVersion>19.0</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -150,124 +150,124 @@
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="fmx.dcp"/>
         <DCCReference Include="OldCEF4Delphi_FMX_Register.pas"/>
-        <DCCReference Include="..\source\uCEFFindHandler.pas"/>
-        <DCCReference Include="..\source\uCEFConstants.pas"/>
-        <DCCReference Include="..\source\uCEFTypes.pas"/>
-        <DCCReference Include="..\source\uCEFInterfaces.pas"/>
-        <DCCReference Include="..\source\uCEFMiscFunctions.pas"/>
-        <DCCReference Include="..\source\uCEFLibFunctions.pas"/>
-        <DCCReference Include="..\source\uCEFApplication.pas"/>
-        <DCCReference Include="..\source\uCEFSchemeRegistrar.pas"/>
-        <DCCReference Include="..\source\uCEFCommandLine.pas"/>
-        <DCCReference Include="..\source\uCEFClient.pas"/>
-        <DCCReference Include="..\source\uCEFProcessMessage.pas"/>
-        <DCCReference Include="..\source\uCEFBrowser.pas"/>
-        <DCCReference Include="..\source\uCEFListValue.pas"/>
-        <DCCReference Include="..\source\uCEFBinaryValue.pas"/>
-        <DCCReference Include="..\source\uCEFValue.pas"/>
-        <DCCReference Include="..\source\uCEFDictionaryValue.pas"/>
-        <DCCReference Include="..\source\uCEFFrame.pas"/>
-        <DCCReference Include="..\source\uCEFPDFPrintCallback.pas"/>
-        <DCCReference Include="..\source\uCEFRunFileDialogCallback.pas"/>
-        <DCCReference Include="..\source\uCEFRequestContext.pas"/>
-        <DCCReference Include="..\source\uCEFNavigationEntryVisitor.pas"/>
-        <DCCReference Include="..\source\uCEFStringVisitor.pas"/>
-        <DCCReference Include="..\source\uCEFv8Context.pas"/>
-        <DCCReference Include="..\source\uCEFDomVisitor.pas"/>
-        <DCCReference Include="..\source\uCEFNavigationEntry.pas"/>
-        <DCCReference Include="..\source\uCEFCookieManager.pas"/>
-        <DCCReference Include="..\source\uCEFCompletionCallback.pas"/>
-        <DCCReference Include="..\source\uCEFRequestContextHandler.pas"/>
-        <DCCReference Include="..\source\uCEFWebPluginInfo.pas"/>
-        <DCCReference Include="..\source\uCEFDomDocument.pas"/>
-        <DCCReference Include="..\source\uCEFDomNode.pas"/>
-        <DCCReference Include="..\source\uCEFv8Value.pas"/>
-        <DCCReference Include="..\source\uCEFv8Accessor.pas"/>
-        <DCCReference Include="..\source\uCEFLoadHandler.pas"/>
-        <DCCReference Include="..\source\uCEFFocusHandler.pas"/>
-        <DCCReference Include="..\source\uCEFContextMenuHandler.pas"/>
-        <DCCReference Include="..\source\uCEFDialogHandler.pas"/>
-        <DCCReference Include="..\source\uCEFKeyboardHandler.pas"/>
-        <DCCReference Include="..\source\uCEFDisplayHandler.pas"/>
-        <DCCReference Include="..\source\uCEFDownloadHandler.pas"/>
-        <DCCReference Include="..\source\uCEFJsDialogHandler.pas"/>
-        <DCCReference Include="..\source\uCEFLifeSpanHandler.pas"/>
-        <DCCReference Include="..\source\uCEFRequestHandler.pas"/>
-        <DCCReference Include="..\source\uCEFRenderHandler.pas"/>
-        <DCCReference Include="..\source\uCEFDragHandler.pas"/>
-        <DCCReference Include="..\source\uCEFPostData.pas"/>
-        <DCCReference Include="..\source\uCEFPostDataElement.pas"/>
-        <DCCReference Include="..\source\uCEFRequest.pas"/>
-        <DCCReference Include="..\source\uCEFStreamReader.pas"/>
-        <DCCReference Include="..\source\uCEFWriteHandler.pas"/>
-        <DCCReference Include="..\source\uCEFStreamWriter.pas"/>
-        <DCCReference Include="..\source\uCEFv8StackFrame.pas"/>
-        <DCCReference Include="..\source\uCEFv8StackTrace.pas"/>
-        <DCCReference Include="..\source\uCEFv8Handler.pas"/>
-        <DCCReference Include="..\source\uCEFRequestCallback.pas"/>
-        <DCCReference Include="..\source\uCEFCustomStreamReader.pas"/>
-        <DCCReference Include="..\source\uCEFCallback.pas"/>
-        <DCCReference Include="..\source\uCEFResourceHandler.pas"/>
-        <DCCReference Include="..\source\uCEFSchemeHandlerFactory.pas"/>
-        <DCCReference Include="..\source\uCEFTask.pas"/>
-        <DCCReference Include="..\source\uCEFTaskRunner.pas"/>
-        <DCCReference Include="..\source\uCEFStringMap.pas"/>
-        <DCCReference Include="..\source\uCEFStringMultimap.pas"/>
-        <DCCReference Include="..\source\uCEFXmlReader.pas"/>
-        <DCCReference Include="..\source\uCEFZipReader.pas"/>
-        <DCCReference Include="..\source\uCEFResponse.pas"/>
-        <DCCReference Include="..\source\uCEFCookieVisitor.pas"/>
-        <DCCReference Include="..\source\uCEFV8Exception.pas"/>
-        <DCCReference Include="..\source\uCEFResourceBundleHandler.pas"/>
-        <DCCReference Include="..\source\uCEFSetCookieCallback.pas"/>
-        <DCCReference Include="..\source\uCEFDeleteCookiesCallback.pas"/>
-        <DCCReference Include="..\source\uCEFDownLoadItem.pas"/>
-        <DCCReference Include="..\source\uCEFBeforeDownloadCallback.pas"/>
-        <DCCReference Include="..\source\uCEFDownloadItemCallback.pas"/>
-        <DCCReference Include="..\source\uCEFAuthCallback.pas"/>
-        <DCCReference Include="..\source\uCEFJsDialogCallback.pas"/>
-        <DCCReference Include="..\source\uCEFContextMenuParams.pas"/>
-        <DCCReference Include="..\source\uCEFMenuModel.pas"/>
-        <DCCReference Include="..\source\uCEFBrowserProcessHandler.pas"/>
-        <DCCReference Include="..\source\uCEFRenderProcessHandler.pas"/>
-        <DCCReference Include="..\source\uCEFUrlrequestClient.pas"/>
-        <DCCReference Include="..\source\uCEFUrlRequest.pas"/>
-        <DCCReference Include="..\source\uCEFWebPluginInfoVisitor.pas"/>
-        <DCCReference Include="..\source\uCEFWebPluginUnstableCallback.pas"/>
-        <DCCReference Include="..\source\uCEFEndTracingCallback.pas"/>
-        <DCCReference Include="..\source\uCEFFileDialogCallback.pas"/>
-        <DCCReference Include="..\source\uCEFDragData.pas"/>
-        <DCCReference Include="..\source\uCEFResolveCallback.pas"/>
-        <DCCReference Include="..\source\uCEFPrintSettings.pas"/>
-        <DCCReference Include="..\source\uCEFSslInfo.pas"/>
-        <DCCReference Include="..\source\uCEFRunContextMenuCallback.pas"/>
-        <DCCReference Include="..\source\uCEFResourceBundle.pas"/>
-        <DCCReference Include="..\source\uCEFResponseFilter.pas"/>
-        <DCCReference Include="..\source\uCEFv8Types.pas"/>
-        <DCCReference Include="..\source\uCEFWindowParent.pas"/>
-        <DCCReference Include="..\source\uCEFChromium.pas"/>
-        <DCCReference Include="..\source\uCEFChromiumEvents.pas"/>
-        <DCCReference Include="..\source\uCEFChromiumOptions.pas"/>
-        <DCCReference Include="..\source\uCEFChromiumFontOptions.pas"/>
-        <DCCReference Include="..\source\uCEFPDFPrintOptions.pas"/>
-        <DCCReference Include="..\source\uCEFChromiumWindow.pas"/>
-        <DCCReference Include="..\source\uOLEDragAndDrop.pas"/>
-        <DCCReference Include="..\source\uCEFDragAndDropMgr.pas"/>
-        <DCCReference Include="..\source\uBufferPanel.pas"/>
-        <DCCReference Include="..\source\uCEFApp.pas"/>
-        <DCCReference Include="..\source\uCEFWorkScheduler.pas"/>
-        <DCCReference Include="..\source\uCEFWorkSchedulerThread.pas"/>
-        <DCCReference Include="..\source\uFMXBufferPanel.pas"/>
-        <DCCReference Include="..\source\uFMXChromium.pas"/>
-        <DCCReference Include="..\source\uFMXWorkScheduler.pas"/>
-        <DCCReference Include="..\source\uCEFStringList.pas"/>
-        <DCCReference Include="..\source\uCEFGeolocationCallback.pas"/>
-        <DCCReference Include="..\source\uCEFGeolocationHandler.pas"/>
-        <DCCReference Include="..\source\uCEFSslCertPrincipal.pas"/>
-        <DCCReference Include="..\source\uCEFBase.pas"/>
-        <DCCReference Include="..\source\uFMXWindowParent.pas"/>
-        <DCCReference Include="..\source\uCEFUrlRequestClientComponent.pas"/>
-        <DCCReference Include="..\source\uCEFUrlRequestClientEvents.pas"/>
+        <DCCReference Include="..\source\oldCEFFindHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFConstants.pas"/>
+        <DCCReference Include="..\source\oldCEFTypes.pas"/>
+        <DCCReference Include="..\source\oldCEFInterfaces.pas"/>
+        <DCCReference Include="..\source\oldCEFMiscFunctions.pas"/>
+        <DCCReference Include="..\source\oldCEFLibFunctions.pas"/>
+        <DCCReference Include="..\source\oldCEFApplication.pas"/>
+        <DCCReference Include="..\source\oldCEFSchemeRegistrar.pas"/>
+        <DCCReference Include="..\source\oldCEFCommandLine.pas"/>
+        <DCCReference Include="..\source\oldCEFClient.pas"/>
+        <DCCReference Include="..\source\oldCEFProcessMessage.pas"/>
+        <DCCReference Include="..\source\oldCEFBrowser.pas"/>
+        <DCCReference Include="..\source\oldCEFListValue.pas"/>
+        <DCCReference Include="..\source\oldCEFBinaryValue.pas"/>
+        <DCCReference Include="..\source\oldCEFValue.pas"/>
+        <DCCReference Include="..\source\oldCEFDictionaryValue.pas"/>
+        <DCCReference Include="..\source\oldCEFFrame.pas"/>
+        <DCCReference Include="..\source\oldCEFPDFPrintCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFRunFileDialogCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFRequestContext.pas"/>
+        <DCCReference Include="..\source\oldCEFNavigationEntryVisitor.pas"/>
+        <DCCReference Include="..\source\oldCEFStringVisitor.pas"/>
+        <DCCReference Include="..\source\oldCEFv8Context.pas"/>
+        <DCCReference Include="..\source\oldCEFDomVisitor.pas"/>
+        <DCCReference Include="..\source\oldCEFNavigationEntry.pas"/>
+        <DCCReference Include="..\source\oldCEFCookieManager.pas"/>
+        <DCCReference Include="..\source\oldCEFCompletionCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFRequestContextHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFWebPluginInfo.pas"/>
+        <DCCReference Include="..\source\oldCEFDomDocument.pas"/>
+        <DCCReference Include="..\source\oldCEFDomNode.pas"/>
+        <DCCReference Include="..\source\oldCEFv8Value.pas"/>
+        <DCCReference Include="..\source\oldCEFv8Accessor.pas"/>
+        <DCCReference Include="..\source\oldCEFLoadHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFFocusHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFContextMenuHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFDialogHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFKeyboardHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFDisplayHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFDownloadHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFJsDialogHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFLifeSpanHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFRequestHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFRenderHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFDragHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFPostData.pas"/>
+        <DCCReference Include="..\source\oldCEFPostDataElement.pas"/>
+        <DCCReference Include="..\source\oldCEFRequest.pas"/>
+        <DCCReference Include="..\source\oldCEFStreamReader.pas"/>
+        <DCCReference Include="..\source\oldCEFWriteHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFStreamWriter.pas"/>
+        <DCCReference Include="..\source\oldCEFv8StackFrame.pas"/>
+        <DCCReference Include="..\source\oldCEFv8StackTrace.pas"/>
+        <DCCReference Include="..\source\oldCEFv8Handler.pas"/>
+        <DCCReference Include="..\source\oldCEFRequestCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFCustomStreamReader.pas"/>
+        <DCCReference Include="..\source\oldCEFCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFResourceHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFSchemeHandlerFactory.pas"/>
+        <DCCReference Include="..\source\oldCEFTask.pas"/>
+        <DCCReference Include="..\source\oldCEFTaskRunner.pas"/>
+        <DCCReference Include="..\source\oldCEFStringMap.pas"/>
+        <DCCReference Include="..\source\oldCEFStringMultimap.pas"/>
+        <DCCReference Include="..\source\oldCEFXmlReader.pas"/>
+        <DCCReference Include="..\source\oldCEFZipReader.pas"/>
+        <DCCReference Include="..\source\oldCEFResponse.pas"/>
+        <DCCReference Include="..\source\oldCEFCookieVisitor.pas"/>
+        <DCCReference Include="..\source\oldCEFV8Exception.pas"/>
+        <DCCReference Include="..\source\oldCEFResourceBundleHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFSetCookieCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFDeleteCookiesCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFDownLoadItem.pas"/>
+        <DCCReference Include="..\source\oldCEFBeforeDownloadCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFDownloadItemCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFAuthCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFJsDialogCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFContextMenuParams.pas"/>
+        <DCCReference Include="..\source\oldCEFMenuModel.pas"/>
+        <DCCReference Include="..\source\oldCEFBrowserProcessHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFRenderProcessHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFUrlrequestClient.pas"/>
+        <DCCReference Include="..\source\oldCEFUrlRequest.pas"/>
+        <DCCReference Include="..\source\oldCEFWebPluginInfoVisitor.pas"/>
+        <DCCReference Include="..\source\oldCEFWebPluginUnstableCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFEndTracingCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFFileDialogCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFDragData.pas"/>
+        <DCCReference Include="..\source\oldCEFResolveCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFPrintSettings.pas"/>
+        <DCCReference Include="..\source\oldCEFSslInfo.pas"/>
+        <DCCReference Include="..\source\oldCEFRunContextMenuCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFResourceBundle.pas"/>
+        <DCCReference Include="..\source\oldCEFResponseFilter.pas"/>
+        <DCCReference Include="..\source\oldCEFv8Types.pas"/>
+        <DCCReference Include="..\source\oldCEFWindowParent.pas"/>
+        <DCCReference Include="..\source\oldCEFChromium.pas"/>
+        <DCCReference Include="..\source\oldCEFChromiumEvents.pas"/>
+        <DCCReference Include="..\source\oldCEFChromiumOptions.pas"/>
+        <DCCReference Include="..\source\oldCEFChromiumFontOptions.pas"/>
+        <DCCReference Include="..\source\oldCEFPDFPrintOptions.pas"/>
+        <DCCReference Include="..\source\oldCEFChromiumWindow.pas"/>
+        <DCCReference Include="..\source\oldOLEDragAndDrop.pas"/>
+        <DCCReference Include="..\source\oldCEFDragAndDropMgr.pas"/>
+        <DCCReference Include="..\source\oldBufferPanel.pas"/>
+        <DCCReference Include="..\source\oldCEFApp.pas"/>
+        <DCCReference Include="..\source\oldCEFWorkScheduler.pas"/>
+        <DCCReference Include="..\source\oldCEFWorkSchedulerThread.pas"/>
+        <DCCReference Include="..\source\oldFMXBufferPanel.pas"/>
+        <DCCReference Include="..\source\oldFMXChromium.pas"/>
+        <DCCReference Include="..\source\oldFMXWorkScheduler.pas"/>
+        <DCCReference Include="..\source\oldCEFStringList.pas"/>
+        <DCCReference Include="..\source\oldCEFGeolocationCallback.pas"/>
+        <DCCReference Include="..\source\oldCEFGeolocationHandler.pas"/>
+        <DCCReference Include="..\source\oldCEFSslCertPrincipal.pas"/>
+        <DCCReference Include="..\source\oldCEFBase.pas"/>
+        <DCCReference Include="..\source\oldFMXWindowParent.pas"/>
+        <DCCReference Include="..\source\oldCEFUrlRequestClientComponent.pas"/>
+        <DCCReference Include="..\source\oldCEFUrlRequestClientEvents.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -305,7 +305,7 @@
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule"/>
-                <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\19.0\Bpl\OldCEF4Delphi_FMX.bpl" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\17.0\Bpl\OldCEF4Delphi.bpl" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\20.0\Bpl\OldCEF4Delphi_FMX.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>OldCEF4Delphi_FMX.bpl</RemoteName>
@@ -316,7 +316,7 @@
                 <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\19.0\Bpl\OldCEF4Delphi_FMX.bpl" Configuration="Debug with logging" Class="ProjectOutput"/>
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libPCRE.dylib" Class="DependencyModule"/>
                 <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\17.0\Bpl\OldCEF4Delphi_FMX.bpl" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\17.0\Bpl\OldCEF4Delphi.bpl" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="..\..\..\..\..\..\..\Public\Documents\Embarcadero\Studio\19.0\Bpl\OldCEF4Delphi_FMX.bpl" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>
@@ -330,9 +330,17 @@
                         <RemoteDir>classes</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidFileProvider">
                     <Platform Name="Android">
+                        <RemoteDir>res\xml</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\xml</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -348,9 +356,23 @@
                         <RemoteDir>library\lib\armeabi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>library\lib\armeabi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidLibnativeArmeabiv7aFile">
+                    <Platform Name="Android64">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidLibnativeMipsFile">
                     <Platform Name="Android">
+                        <RemoteDir>library\lib\mips</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>library\lib\mips</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -360,9 +382,23 @@
                         <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>library\lib\arm64-v8a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidServiceOutput_Android32">
+                    <Platform Name="Android64">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidSplashImageDef">
                     <Platform Name="Android">
+                        <RemoteDir>res\drawable</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\drawable</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -372,15 +408,37 @@
                         <RemoteDir>res\values</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\values</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidSplashStylesV21">
                     <Platform Name="Android">
                         <RemoteDir>res\values-v21</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\values-v21</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_Colors">
+                    <Platform Name="Android">
+                        <RemoteDir>res\values</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\values</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="Android_DefaultAppIcon">
                     <Platform Name="Android">
+                        <RemoteDir>res\drawable</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\drawable</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -390,9 +448,17 @@
                         <RemoteDir>res\drawable-xxhdpi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="Android_LauncherIcon36">
                     <Platform Name="Android">
+                        <RemoteDir>res\drawable-ldpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\drawable-ldpi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -402,9 +468,17 @@
                         <RemoteDir>res\drawable-mdpi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-mdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="Android_LauncherIcon72">
                     <Platform Name="Android">
+                        <RemoteDir>res\drawable-hdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\drawable-hdpi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -414,9 +488,67 @@
                         <RemoteDir>res\drawable-xhdpi</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_NotificationIcon24">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-mdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-mdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_NotificationIcon36">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-hdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-hdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_NotificationIcon48">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_NotificationIcon72">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_NotificationIcon96">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xxxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xxxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="Android_SplashImage426">
                     <Platform Name="Android">
+                        <RemoteDir>res\drawable-small</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\drawable-small</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -426,9 +558,17 @@
                         <RemoteDir>res\drawable-normal</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-normal</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                 </DeployClass>
                 <DeployClass Name="Android_SplashImage640">
                     <Platform Name="Android">
+                        <RemoteDir>res\drawable-large</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <RemoteDir>res\drawable-large</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
@@ -436,6 +576,20 @@
                 <DeployClass Name="Android_SplashImage960">
                     <Platform Name="Android">
                         <RemoteDir>res\drawable-xlarge</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\drawable-xlarge</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_Strings">
+                    <Platform Name="Android">
+                        <RemoteDir>res\values</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>res\values</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
@@ -507,6 +661,9 @@
                     <Platform Name="Android">
                         <Operation>0</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <Operation>0</Operation>
+                    </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>0</Operation>
                     </Platform>
@@ -559,6 +716,16 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="iPad_Launch2x">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="iPad_Launch768">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
@@ -570,6 +737,26 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="iPad_LaunchDark2x">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Launch2x">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="iPhone_Launch320">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
@@ -578,6 +765,16 @@
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Launch3x">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
@@ -603,8 +800,31 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="iPhone_LaunchDark2x">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_LaunchDark3x">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <RemoteDir>..\$(PROJECTNAME).launchscreen\Assets\LaunchScreenImage.imageset</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="ProjectAndroidManifest">
                     <Platform Name="Android">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
@@ -621,6 +841,7 @@
                 <DeployClass Name="ProjectiOSDeviceResourceRules"/>
                 <DeployClass Name="ProjectiOSEntitlements"/>
                 <DeployClass Name="ProjectiOSInfoPList"/>
+                <DeployClass Name="ProjectiOSLaunchScreen"/>
                 <DeployClass Name="ProjectiOSResource">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
@@ -650,6 +871,10 @@
                         <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>library\lib\arm64-v8a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
                     </Platform>
@@ -670,6 +895,12 @@
                     </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectOutput_Android32">
+                    <Platform Name="Android64">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
+                        <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectUWPManifest">
@@ -709,6 +940,7 @@
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Android64" Name="$(PROJECTNAME)"/>
             </Deployment>
             <Platforms>
                 <Platform value="Win32">True</Platform>

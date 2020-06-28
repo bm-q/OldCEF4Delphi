@@ -37,7 +37,7 @@
 
 unit uTestExtension;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -47,8 +47,8 @@ uses
   {$ELSE}
   Windows,
   {$ENDIF}
-  uCEFRenderProcessHandler, uCEFBrowserProcessHandler, uCEFInterfaces, uCEFProcessMessage,
-  uCEFv8Context, uCEFTypes, uCEFv8Handler;
+  oldCEFRenderProcessHandler, oldCEFBrowserProcessHandler, oldCEFInterfaces, oldCEFProcessMessage,
+  oldCEFv8Context, oldCEFTypes, oldCEFv8Handler;
 
 type
   TTestExtension = class
@@ -59,28 +59,28 @@ type
 implementation
 
 uses
-  uCEFMiscFunctions, uCEFConstants, uJSRTTIExtension;
+  oldCEFMiscFunctions, oldCEFConstants, uJSRTTIExtension;
 
 class procedure TTestExtension.mouseover(const data: string);
 var
-  msg: ICefProcessMessage;
+  msg: IOldCefProcessMessage;
 begin
-  msg := TCefProcessMessageRef.New(MOUSEOVER_MESSAGE_NAME);
+  msg := TOldCefProcessMessageRef.New(MOUSEOVER_MESSAGE_NAME);
   msg.ArgumentList.SetString(0, data);
 
-  // Sending a message back to the browser. It'll be received in the TChromium.OnProcessMessageReceived event.
-  // TCefv8ContextRef.Current returns the v8 context for the frame that is currently executing Javascript.
-  TCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
+  // Sending a message back to the browser. It'll be received in the TOldChromium.OnProcessMessageReceived event.
+  // TOldCefv8ContextRef.Current returns the v8 context for the frame that is currently executing Javascript.
+  TOldCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
 end;
 
 class procedure TTestExtension.sendresulttobrowser(const msgtext, msgname : string);
 var
-  msg: ICefProcessMessage;
+  msg: IOldCefProcessMessage;
 begin
-  msg := TCefProcessMessageRef.New(msgname);
+  msg := TOldCefProcessMessageRef.New(msgname);
   msg.ArgumentList.SetString(0, msgtext);
 
-  TCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
+  TOldCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
 end;
 
 end.

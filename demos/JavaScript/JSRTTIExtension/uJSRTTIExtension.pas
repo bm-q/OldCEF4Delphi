@@ -37,7 +37,7 @@
 
 unit uJSRTTIExtension;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,7 +49,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFApplication, oldCEFTypes, oldCEFConstants;
 
 const
   MINIBROWSER_SHOWTEXTVIEWER = WM_APP + $100;
@@ -68,40 +68,40 @@ type
     Edit1: TEdit;
     GoBtn: TButton;
     StatusBar1: TStatusBar;
-    CEFWindowParent1: TCEFWindowParent;
-    Chromium1: TChromium;
+    CEFWindowParent1: TOldCefWindowParent;
+    Chromium1: TOldChromium;
     Timer1: TTimer;
     procedure FormShow(Sender: TObject);
     procedure GoBtnClick(Sender: TObject);
     procedure Chromium1BeforeContextMenu(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; const model: ICefMenuModel);
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
     procedure Chromium1ContextMenuCommand(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; commandId: Integer;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; commandId: Integer;
       eventFlags: Cardinal; out Result: Boolean);
     procedure Chromium1ProcessMessageReceived(Sender: TObject;
-      const browser: ICefBrowser; sourceProcess: TCefProcessId;
-      const message: ICefProcessMessage; out Result: Boolean);
-    procedure Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+      const browser: IOldCefBrowser; sourceProcess: TOldCefProcessId;
+      const message: IOldCefProcessMessage; out Result: Boolean);
+    procedure Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
     procedure Timer1Timer(Sender: TObject);
     procedure Chromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo;
-      var client: ICefClient; var settings: TCefBrowserSettings;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo;
+      var client: IOldCefClient; var settings: TOldCefBrowserSettings;
       var noJavascriptAccess: Boolean; var Result: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
   protected
     FText : string;
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure BrowserCreatedMsg(var aMessage : TMessage); message CEF_AFTERCREATED;
@@ -116,52 +116,52 @@ type
 var
   JSRTTIExtensionFrm: TJSRTTIExtensionFrm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  uSimpleTextViewer, uCEFv8Handler, uTestExtension, uCEFMiscFunctions;
+  uSimpleTextViewer, oldCEFv8Handler, uTestExtension, oldCEFMiscFunctions;
 
 // The CEF3 document describing extensions is here :
 // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
 
 // This demo has a TTestExtension class that is registered in the
-// GlobalCEFApp.OnWebKitInitialized event when the application is initializing.
+// GlobalOldCEFApp.OnWebKitInitialized event when the application is initializing.
 
 // TTestExtension can send information back to the browser with a process message.
 // The TTestExtension.mouseover function do this by calling
-// TCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
+// TOldCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
 
-// TCefv8ContextRef.Current returns the v8 context for the frame that is currently executing JS,
-// TCefv8ContextRef.Current.Browser.SendProcessMessage should send a message to the right browser even
+// TOldCefv8ContextRef.Current returns the v8 context for the frame that is currently executing JS,
+// TOldCefv8ContextRef.Current.Browser.SendProcessMessage should send a message to the right browser even
 // if you have created several browsers in one app.
 
-// That message is received in the TChromium.OnProcessMessageReceived event.
-// Even if you create several TChromium objects you should have no problem because each of them will have its own
-// TChromium.OnProcessMessageReceived event to receive the messages from the extension.
+// That message is received in the TOldChromium.OnProcessMessageReceived event.
+// Even if you create several TOldChromium objects you should have no problem because each of them will have its own
+// TOldChromium.OnProcessMessageReceived event to receive the messages from the extension.
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TChromium.CloseBrowser which triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldChromium.CloseBrowser which triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
-procedure GlobalCEFApp_OnWebKitInitialized;
+procedure GlobalOldCEFApp_OnWebKitInitialized;
 begin
 {$IFDEF DELPHI14_UP}
   // Registering the extension. Read this document for more details :
   // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
-  TCefRTTIExtension.Register('myextension', TTestExtension);
+  TOldCefRTTIExtension.Register('myextension', TTestExtension);
 {$ENDIF}
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  GlobalCEFApp                     := TCefApplication.Create;
-  GlobalCEFApp.OnWebKitInitialized := GlobalCEFApp_OnWebKitInitialized;
+  GlobalOldCEFApp                     := TOldCefApplication.Create;
+  GlobalOldCEFApp.OnWebKitInitialized := GlobalOldCEFApp_OnWebKitInitialized;
 end;
 
 procedure TJSRTTIExtensionFrm.GoBtnClick(Sender: TObject);
@@ -169,14 +169,14 @@ begin
   Chromium1.LoadURL(Edit1.Text);
 end;
 
-procedure TJSRTTIExtensionFrm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TJSRTTIExtensionFrm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   PostMessage(Handle, CEF_AFTERCREATED, 0, 0);
 end;
 
 procedure TJSRTTIExtensionFrm.Chromium1BeforeContextMenu(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const params: ICefContextMenuParams; const model: ICefMenuModel);
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
 begin
   // Adding some custom context menu entries
   model.AddSeparator;
@@ -186,11 +186,11 @@ begin
 end;
 
 procedure TJSRTTIExtensionFrm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
@@ -198,8 +198,8 @@ begin
 end;
 
 procedure TJSRTTIExtensionFrm.Chromium1ContextMenuCommand(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const params: ICefContextMenuParams; commandId: Integer;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const params: IOldCefContextMenuParams; commandId: Integer;
   eventFlags: Cardinal; out Result: Boolean);
 begin
   Result := False;
@@ -250,8 +250,8 @@ begin
 end;
 
 procedure TJSRTTIExtensionFrm.Chromium1ProcessMessageReceived(Sender: TObject;
-  const browser: ICefBrowser; sourceProcess: TCefProcessId;
-  const message: ICefProcessMessage; out Result: Boolean);
+  const browser: IOldCefBrowser; sourceProcess: TOldCefProcessId;
+  const message: IOldCefProcessMessage; out Result: Boolean);
 begin
   Result := False;
 
@@ -290,7 +290,7 @@ procedure TJSRTTIExtensionFrm.FormShow(Sender: TObject);
 begin
   StatusBar1.Panels[0].Text := 'Initializing browser. Please wait...';
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1, '')) then Timer1.Enabled := True;
 end;
@@ -332,14 +332,14 @@ begin
 end;
 
 procedure TJSRTTIExtensionFrm.Chromium1BeforeClose(
-  Sender: TObject; const browser: ICefBrowser);
+  Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TJSRTTIExtensionFrm.Chromium1Close(
-  Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+  Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEF_DESTROY, 0, 0);
   aAction := cbaDelay;

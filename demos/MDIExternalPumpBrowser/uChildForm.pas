@@ -37,7 +37,7 @@
 
 unit uChildForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -50,43 +50,43 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Menus,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Types, ComCtrls, ClipBrd,
   {$ENDIF}
-  uMainForm, uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFConstants, uCEFTypes;
+  uMainForm, oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFConstants, oldCEFTypes;
 
 type
   TChildForm = class(TForm)
     Panel1: TPanel;
     Edit1: TEdit;
     Button1: TButton;
-    Chromium1: TChromium;
-    CEFWindowParent1: TCEFWindowParent;
+    Chromium1: TOldChromium;
+    CEFWindowParent1: TOldCefWindowParent;
     StatusBar1: TStatusBar;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+    procedure Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
     procedure FormDestroy(Sender: TObject);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure Chromium1LoadingStateChange(Sender: TObject;
-      const browser: ICefBrowser; isLoading, canGoBack,
+      const browser: IOldCefBrowser; isLoading, canGoBack,
       canGoForward: Boolean);
     procedure Chromium1StatusMessage(Sender: TObject;
-      const browser: ICefBrowser; const value: ustring);
+      const browser: IOldCefBrowser; const value: oldustring);
     procedure Chromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo;
-      var client: ICefClient; var settings: TCefBrowserSettings;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo;
+      var client: IOldCefClient; var settings: TOldCefBrowserSettings;
       var noJavascriptAccess: Boolean; var Result: Boolean);
 
   private
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
   protected
@@ -107,48 +107,48 @@ implementation
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery calls TChromium.CloseBrowser
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery calls TOldChromium.CloseBrowser
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
 uses
-  uCEFRequestContext, uCEFApplication;
+  oldCEFRequestContext, oldCEFApplication;
 
 procedure TChildForm.Button1Click(Sender: TObject);
 begin
   Chromium1.LoadURL(Edit1.Text);
 end;
 
-procedure TChildForm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TChildForm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   PostMessage(Handle, CEFBROWSER_CREATED, 0, 0);
 end;
 
-procedure TChildForm.Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TChildForm.Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TChildForm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
   Result := (targetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
-procedure TChildForm.Chromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TChildForm.Chromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEFBROWSER_DESTROY, 0, 0);
   aAction := cbaDelay;
 end;
 
-procedure TChildForm.Chromium1LoadingStateChange(Sender: TObject; const browser: ICefBrowser; isLoading, canGoBack, canGoForward: Boolean);
+procedure TChildForm.Chromium1LoadingStateChange(Sender: TObject; const browser: IOldCefBrowser; isLoading, canGoBack, canGoForward: Boolean);
 begin
   if isLoading then
     begin
@@ -162,7 +162,7 @@ begin
     end;
 end;
 
-procedure TChildForm.Chromium1StatusMessage(Sender: TObject; const browser: ICefBrowser; const value: ustring);
+procedure TChildForm.Chromium1StatusMessage(Sender: TObject; const browser: IOldCefBrowser; const value: oldustring);
 begin
   StatusBar1.Panels[1].Text := value;
 end;
@@ -199,21 +199,21 @@ end;
 
 procedure TChildForm.FormShow(Sender: TObject);
 var
-  TempContext : ICefRequestContext;
+  TempContext : IOldCefRequestContext;
 begin
-  // The new request context overrides several GlobalCEFApp properties like :
+  // The new request context overrides several GlobalOldCEFApp properties like :
   // cache, AcceptLanguageList, PersistSessionCookies, PersistUserPreferences,
   // IgnoreCertificateErrors and EnableNetSecurityExpiration
 
   // If you use an empty cache path, CEF will use in-memory cache.
 
   if MainForm.NewContextChk.Checked then
-    TempContext := TCefRequestContextRef.New('', '', False, False, False)
+    TempContext := TOldCefRequestContextRef.New('', '', False, False, False)
    else
     TempContext := nil;
 
-  // In case you used a custom cookies path in the GlobalCEFApp you can
-  // override it in the TChromium.CreateBrowser function
+  // In case you used a custom cookies path in the GlobalOldCEFApp you can
+  // override it in the TOldChromium.CreateBrowser function
   Chromium1.CreateBrowser(CEFWindowParent1, '', TempContext);
 end;
 
@@ -235,14 +235,14 @@ procedure TChildForm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TChildForm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TChildForm.BrowserCreatedMsg(var aMessage : TMessage);

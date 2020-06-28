@@ -64,7 +64,7 @@ object JSRTTIExtensionFrm: TJSRTTIExtensionFrm
         Width = 50
       end>
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 30
     Width = 978
@@ -72,7 +72,7 @@ object JSRTTIExtensionFrm: TJSRTTIExtensionFrm
     Align = alClient
     TabOrder = 2
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnProcessMessageReceived = Chromium1ProcessMessageReceived
     OnBeforeContextMenu = Chromium1BeforeContextMenu
     OnContextMenuCommand = Chromium1ContextMenuCommand

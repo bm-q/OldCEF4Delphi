@@ -103,7 +103,7 @@ object ResponseFilterBrowserFrm: TResponseFilterBrowserFrm
       end
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCEFWindowParent
     Left = 0
     Top = 49
     Width = 1038
@@ -157,7 +157,7 @@ object ResponseFilterBrowserFrm: TResponseFilterBrowserFrm
     Left = 56
     Top = 88
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnLoadStart = Chromium1LoadStart
     OnBeforePopup = Chromium1BeforePopup
     OnAfterCreated = Chromium1AfterCreated

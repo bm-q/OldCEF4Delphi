@@ -37,7 +37,7 @@
 
 unit uMainForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -90,30 +90,30 @@ type
 var
   MainForm: TMainForm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  uChildForm, uCEFApplication;
+  uChildForm, oldCEFApplication;
 
 // Destruction steps
 // =================
 // 1. Destroy all child forms
 // 2. Wait until all the child forms are closed before closing the main form and terminating the application.
 
-procedure GlobalCEFApp_OnContextInitialized;
+procedure GlobalOldCEFApp_OnContextInitialized;
 begin
   if (MainForm <> nil) and MainForm.HandleAllocated then
     PostMessage(MainForm.Handle, CEFBROWSER_INITIALIZED, 0, 0);
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  GlobalCEFApp                      := TCefApplication.Create;
-  GlobalCEFApp.OnContextInitialized := GlobalCEFApp_OnContextInitialized;
+  GlobalOldCEFApp                      := TOldCefApplication.Create;
+  GlobalOldCEFApp.OnContextInitialized := GlobalOldCEFApp_OnContextInitialized;
 end;
 
 procedure TMainForm.CreateMDIChild(const Name: string);
@@ -197,7 +197,7 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  if (GlobalCEFApp <> nil) and GlobalCEFApp.GlobalContextInitialized then
+  if (GlobalOldCEFApp <> nil) and GlobalOldCEFApp.GlobalContextInitialized then
     begin
       Caption           := 'MDI Browser';
       ButtonPnl.Enabled := True;

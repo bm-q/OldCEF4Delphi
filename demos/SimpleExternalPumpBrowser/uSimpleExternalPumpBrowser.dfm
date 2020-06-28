@@ -77,7 +77,7 @@ object SimpleExternalPumpBrowserFrm: TSimpleExternalPumpBrowserFrm
         'https://frames-per-second.appspot.com/')
     end
   end
-  object ChromiumWindow1: TChromiumWindow
+  object ChromiumWindow1: TOldChromiumWindow
     Left = 0
     Top = 30
     Width = 1038

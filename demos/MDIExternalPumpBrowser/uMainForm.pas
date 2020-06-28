@@ -37,7 +37,7 @@
 
 unit uMainForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -51,7 +51,7 @@ uses
   Controls, StdCtrls, Dialogs, Buttons, Messages,
   ExtCtrls, ComCtrls,
   {$ENDIF}
-  uCEFWorkScheduler;
+  oldCEFWorkScheduler;
 
 const
   CEFBROWSER_CREATED          = WM_APP + $100;
@@ -91,36 +91,36 @@ type
 var
   MainForm : TMainForm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  uChildForm, uCEFApplication;
+  uChildForm, oldCEFApplication;
 
 // Destruction steps
 // =================
 // 1. Destroy all child forms
 // 2. Wait until all the child forms are closed before closing the main form and terminating the application.
 
-procedure GlobalCEFApp_OnContextInitialized;
+procedure GlobalOldCEFApp_OnContextInitialized;
 begin
   if (MainForm <> nil) and MainForm.HandleAllocated then
     PostMessage(MainForm.Handle, CEFBROWSER_INITIALIZED, 0, 0);
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  // GlobalCEFWorkScheduler needs to be created before the
-  // GlobalCEFApp.StartMainProcess call.
-  GlobalCEFWorkScheduler := TCEFWorkScheduler.Create(nil);
+  // GlobalOldCEFWorkScheduler needs to be created before the
+  // GlobalOldCEFApp.StartMainProcess call.
+  GlobalOldCEFWorkScheduler := TOldCefWorkScheduler.Create(nil);
 
-  GlobalCEFApp                           := TCefApplication.Create;
-  GlobalCEFApp.FlashEnabled              := False;
-  GlobalCEFApp.MultiThreadedMessageLoop  := False;
-  GlobalCEFApp.OnContextInitialized      := GlobalCEFApp_OnContextInitialized;
+  GlobalOldCEFApp                           := TOldCefApplication.Create;
+  GlobalOldCEFApp.FlashEnabled              := False;
+  GlobalOldCEFApp.MultiThreadedMessageLoop  := False;
+  GlobalOldCEFApp.OnContextInitialized      := GlobalOldCEFApp_OnContextInitialized;
 end;
 
 procedure TMainForm.CreateMDIChild(const Name: string);
@@ -204,7 +204,7 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  if (GlobalCEFApp <> nil) and GlobalCEFApp.GlobalContextInitialized then
+  if (GlobalOldCEFApp <> nil) and GlobalOldCEFApp.GlobalContextInitialized then
     begin
       Caption           := 'MDI External Pump Browser';
       ButtonPnl.Enabled := True;

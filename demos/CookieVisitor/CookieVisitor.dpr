@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uCookieVisitor in 'uCookieVisitor.pas' {CookieVisitorFrm},
   uSimpleTextViewer in 'uSimpleTextViewer.pas' {SimpleTextViewerFrm};
 
@@ -56,18 +56,18 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
       Application.MainFormOnTaskbar := True;
       {$ENDIF}
-      Application.CreateForm(TCookieVisitorFrm, CookieVisitorFrm);
+      Application.CreateForm(TOldCookieVisitorFrm, CookieVisitorFrm);
       Application.CreateForm(TSimpleTextViewerFrm, SimpleTextViewerFrm);
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

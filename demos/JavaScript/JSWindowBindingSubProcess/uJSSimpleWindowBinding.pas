@@ -37,7 +37,7 @@
 
 unit uJSSimpleWindowBinding;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,38 +49,38 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes,
-  uCEFConstants, uCEFv8Value;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFApplication, oldCEFTypes,
+  oldCEFConstants, oldCEFv8Value;
 
 type
   TJSSimpleWindowBindingFrm = class(TForm)
     NavControlPnl: TPanel;
     Edit1: TEdit;
     GoBtn: TButton;
-    CEFWindowParent1: TCEFWindowParent;
-    Chromium1: TChromium;
+    CEFWindowParent1: TOldCefWindowParent;
+    Chromium1: TOldChromium;
     Timer1: TTimer;
     procedure FormShow(Sender: TObject);
     procedure GoBtnClick(Sender: TObject);
-    procedure Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+    procedure Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
     procedure Timer1Timer(Sender: TObject);
     procedure Chromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo;
-      var client: ICefClient; var settings: TCefBrowserSettings;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo;
+      var client: IOldCefClient; var settings: TOldCefBrowserSettings;
       var noJavascriptAccess: Boolean; var Result: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
   protected
     FText : string;
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure BrowserCreatedMsg(var aMessage : TMessage); message CEF_AFTERCREATED;
@@ -104,30 +104,30 @@ implementation
 // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
 
 // The HTML file in this demo has a button that shows the contents of 'window.myval'
-// which was set in the GlobalCEFApp.OnContextCreated event.
+// which was set in the GlobalOldCEFApp.OnContextCreated event.
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TChromium.CloseBrowser which triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldChromium.CloseBrowser which triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
 procedure TJSSimpleWindowBindingFrm.GoBtnClick(Sender: TObject);
 begin
   Chromium1.LoadURL(Edit1.Text);
 end;
 
-procedure TJSSimpleWindowBindingFrm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TJSSimpleWindowBindingFrm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   PostMessage(Handle, CEF_AFTERCREATED, 0, 0);
 end;
 
 procedure TJSSimpleWindowBindingFrm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
@@ -136,7 +136,7 @@ end;
 
 procedure TJSSimpleWindowBindingFrm.FormShow(Sender: TObject);
 begin
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1, '')) then Timer1.Enabled := True;
 end;
@@ -174,25 +174,25 @@ procedure TJSSimpleWindowBindingFrm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TJSSimpleWindowBindingFrm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TJSSimpleWindowBindingFrm.Chromium1BeforeClose(
-  Sender: TObject; const browser: ICefBrowser);
+  Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TJSSimpleWindowBindingFrm.Chromium1Close(
-  Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+  Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEF_DESTROY, 0, 0);
   aAction := cbaDelay;
@@ -201,7 +201,7 @@ end;
 procedure TJSSimpleWindowBindingFrm.FormCloseQuery(
   Sender: TObject; var CanClose: Boolean);
 begin
-  if GlobalCEFApp.LibLoaded then
+  if GlobalOldCEFApp.LibLoaded then
     begin
       CanClose := FCanClose;
 

@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF}
-  uCEFApplication,
+  oldCefApplication,
   uSimpleBrowser in 'uSimpleBrowser.pas' {Form1};
 
 {$R *.res}
@@ -57,20 +57,20 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
   // In case you want to use custom directories for the CEF3 binaries, cache, cookies and user data.
   // If you don't set a cache directory the browser will use in-memory cache.
 {
-  GlobalCEFApp.FrameworkDirPath     := 'cef';
-  GlobalCEFApp.ResourcesDirPath     := 'cef';
-  GlobalCEFApp.LocalesDirPath       := 'cef\locales';
-  GlobalCEFApp.cache                := 'cef\cache';
-  GlobalCEFApp.cookies              := 'cef\cookies';
-  GlobalCEFApp.UserDataPath         := 'cef\User Data';
+  GlobalOldCEFApp.FrameworkDirPath     := 'cef';
+  GlobalOldCEFApp.ResourcesDirPath     := 'cef';
+  GlobalOldCEFApp.LocalesDirPath       := 'cef\locales';
+  GlobalOldCEFApp.cache                := 'cef\cache';
+  GlobalOldCEFApp.cookies              := 'cef\cookies';
+  GlobalOldCEFApp.UserDataPath         := 'cef\User Data';
 }
 
-  GlobalCEFApp.BrowserSubprocessPath := 'SubProcess.exe';
+  GlobalOldCEFApp.BrowserSubprocessPath := 'SubProcess.exe';
 
   // Follow these steps to test this demo :
   // 1. Build the SubProcess project in this directory.
@@ -78,10 +78,10 @@ begin
   // 3. Build this project : SimpleBrowser
   // 4. Run this demo : SimpleBrowser
 
-  // You *MUST* call GlobalCEFApp.StartMainProcess in a if..then clause
+  // You *MUST* call GlobalOldCEFApp.StartMainProcess in a if..then clause
   // with the Application initialization inside the begin..end.
   // Read this https://www.briskbard.com/index.php?lang=en&pageid=cef
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -91,5 +91,5 @@ begin
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

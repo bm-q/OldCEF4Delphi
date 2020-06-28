@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF}
-  uCEFApplication,
+  oldCefApplication,
   uSimpleOSRBrowser in 'uSimpleOSRBrowser.pas' {Form1};
 
 {$R *.res}
@@ -55,11 +55,11 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp                            := TCefApplication.Create;
-  GlobalCEFApp.WindowlessRenderingEnabled := True;
-  GlobalCEFApp.EnableHighDPISupport       := True;
+  GlobalOldCEFApp                            := TOldCefApplication.Create;
+  GlobalOldCEFApp.WindowlessRenderingEnabled := True;
+  GlobalOldCEFApp.EnableHighDPISupport       := True;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -69,5 +69,5 @@ begin
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

@@ -20,7 +20,7 @@ object ChildForm: TChildForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 0
     Width = 602
@@ -28,7 +28,7 @@ object ChildForm: TChildForm
     Align = alClient
     TabOrder = 0
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnPreKeyEvent = Chromium1PreKeyEvent
     OnKeyEvent = Chromium1KeyEvent
     OnBeforePopup = Chromium1BeforePopup

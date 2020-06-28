@@ -22,7 +22,7 @@ object WebBrowserFrm: TWebBrowserFrm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TBufferPanel
+  object Panel1: TOldBufferPanel
     Left = 0
     Top = 0
     Width = 800
@@ -40,7 +40,7 @@ object WebBrowserFrm: TWebBrowserFrm
     OnResize = Panel1Resize
     OnMouseLeave = Panel1MouseLeave
   end
-  object chrmosr: TChromium
+  object chrmosr: TOldChromium
     OnTooltip = chrmosrTooltip
     OnBeforePopup = chrmosrBeforePopup
     OnAfterCreated = chrmosrAfterCreated

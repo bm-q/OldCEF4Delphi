@@ -37,7 +37,7 @@
 
 unit uPreferences;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 

@@ -37,7 +37,7 @@
 
 unit uTestExtensionHandler;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -47,36 +47,36 @@ uses
   {$ELSE}
   Windows,
   {$ENDIF}
-  uCEFRenderProcessHandler, uCEFBrowserProcessHandler, uCEFInterfaces, uCEFProcessMessage,
-  uCEFv8Context, uCEFTypes, uCEFv8Handler;
+  oldCEFRenderProcessHandler, oldCEFBrowserProcessHandler, oldCEFInterfaces, oldCEFProcessMessage,
+  oldCEFv8Context, oldCEFTypes, oldCEFv8Handler;
 
 type
-  TTestExtensionHandler = class(TCefv8HandlerOwn)
+  TTestExtensionHandler = class(TOldCefv8HandlerOwn)
     protected
-      function Execute(const name: ustring; const obj: ICefv8Value; const arguments: TCefv8ValueArray; var retval: ICefv8Value; var exception: ustring): Boolean; override;
+      function Execute(const name: oldustring; const obj: IOldCefv8Value; const arguments: TOldCefv8ValueArray; var retval: IOldCefv8Value; var exception: oldustring): Boolean; override;
   end;
 
 implementation
 
 uses
-  uCEFMiscFunctions, uCEFConstants, uJSExtension;
+  oldCEFMiscFunctions, oldCEFConstants, uJSExtension;
 
-function TTestExtensionHandler.Execute(const name      : ustring;
-                                       const obj       : ICefv8Value;
-                                       const arguments : TCefv8ValueArray;
-                                       var   retval    : ICefv8Value;
-                                       var   exception : ustring): Boolean;
+function TTestExtensionHandler.Execute(const name      : oldustring;
+                                       const obj       : IOldCefv8Value;
+                                       const arguments : TOldCefv8ValueArray;
+                                       var   retval    : IOldCefv8Value;
+                                       var   exception : oldustring): Boolean;
 var
-  msg: ICefProcessMessage;
+  msg: IOldCefProcessMessage;
 begin
   if (name = 'mouseover') then
     begin
       if (length(arguments) > 0) and arguments[0].IsString then
         begin
-          msg := TCefProcessMessageRef.New(MOUSEOVER_MESSAGE_NAME);
+          msg := TOldCefProcessMessageRef.New(MOUSEOVER_MESSAGE_NAME);
           msg.ArgumentList.SetString(0, arguments[0].GetStringValue);
 
-          TCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
+          TOldCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
         end;
 
       Result := True;
@@ -86,10 +86,10 @@ begin
       begin
         if (length(arguments) > 1) and arguments[0].IsString and arguments[1].IsString then
           begin
-            msg := TCefProcessMessageRef.New(arguments[1].GetStringValue);
+            msg := TOldCefProcessMessageRef.New(arguments[1].GetStringValue);
             msg.ArgumentList.SetString(0, arguments[0].GetStringValue);
 
-            TCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
+            TOldCefv8ContextRef.Current.Browser.SendProcessMessage(PID_BROWSER, msg);
           end;
 
         Result := True;

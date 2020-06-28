@@ -39,7 +39,7 @@ unit OldCEF4Delphi_Register;
 
 {$R chromium.dcr}
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -53,13 +53,13 @@ uses
   {$ELSE}
   Classes,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uBufferPanel,
-  uCEFWorkScheduler, uCEFUrlRequestClientComponent;
+  oldCEFChromium, oldCEFWindowParent, oldCEFChromiumWindow, oldBufferPanel,
+  oldCEFWorkScheduler, oldCEFUrlRequestClientComponent;
 
 procedure Register;
 begin
-  RegisterComponents('Chromium', [TChromium, TCEFWindowParent, TChromiumWindow, TBufferPanel,
-                                  TCEFWorkScheduler, TCEFUrlRequestClientComponent]);
+  RegisterComponents('OldChromium', [TOldChromium, TOldCEFWindowParent, TOldChromiumWindow, TOldBufferPanel,
+                                  TOldCEFWorkScheduler, TOldCEFUrlRequestClientComponent]);
 end;
 
 end.

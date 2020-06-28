@@ -1,4 +1,4 @@
-object CookieVisitorFrm: TCookieVisitorFrm
+object CookieVisitorFrm: TOldCookieVisitorFrm
   Left = 0
   Top = 0
   Caption = 'Cookie Visitor'
@@ -57,7 +57,7 @@ object CookieVisitorFrm: TCookieVisitorFrm
       OnClick = GoBtnClick
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 30
     Width = 884
@@ -65,7 +65,7 @@ object CookieVisitorFrm: TCookieVisitorFrm
     Align = alClient
     TabOrder = 1
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnCookiesDeleted = Chromium1CookiesDeleted
     OnBeforeContextMenu = Chromium1BeforeContextMenu
     OnContextMenuCommand = Chromium1ContextMenuCommand

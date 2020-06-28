@@ -41,7 +41,7 @@ program SimpleBrowser_D7;
 
 uses
   Forms,
-  uCEFApplication,
+  oldCefApplication,
   uSimpleBrowser in 'uSimpleBrowser.pas' {Form1};
 
 
@@ -51,24 +51,24 @@ uses
 {$SetPEFlags $20}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
   // In case you want to use custom directories for the CEF3 binaries, cache, cookies and user data.
 {
-  GlobalCEFApp.FrameworkDirPath     := 'cef';
-  GlobalCEFApp.ResourcesDirPath     := 'cef';
-  GlobalCEFApp.LocalesDirPath       := 'cef\locales';
-  GlobalCEFApp.cache                := 'cef\cache';
-  GlobalCEFApp.cookies              := 'cef\cookies';
-  GlobalCEFApp.UserDataPath         := 'cef\User Data';
+  GlobalOldCEFApp.FrameworkDirPath     := 'cef';
+  GlobalOldCEFApp.ResourcesDirPath     := 'cef';
+  GlobalOldCEFApp.LocalesDirPath       := 'cef\locales';
+  GlobalOldCEFApp.cache                := 'cef\cache';
+  GlobalOldCEFApp.cookies              := 'cef\cookies';
+  GlobalOldCEFApp.UserDataPath         := 'cef\User Data';
 }
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.CreateForm(TForm1, Form1);
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

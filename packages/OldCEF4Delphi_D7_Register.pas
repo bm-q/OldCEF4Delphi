@@ -39,7 +39,7 @@ unit OldCEF4Delphi_D7_Register;
 
 {$R chromium.dcr}
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,8 +49,8 @@ implementation
 
 uses
   Classes,
-  uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uBufferPanel, uCEFWorkScheduler,
-  uCEFUrlRequestClientComponent;
+  oldCEFChromium, oldCEFWindowParent, oldCEFChromiumWindow, oldBufferPanel, oldCEFWorkScheduler,
+  oldCEFUrlRequestClientComponent;
 
 procedure Register;
 begin

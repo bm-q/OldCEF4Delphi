@@ -37,42 +37,42 @@
 
 unit uMyV8Accessor;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
 uses
-  uCEFV8Value, uCEFv8Accessor, uCEFInterfaces, uCEFTypes;
+  oldCEFV8Value, oldCEFv8Accessor, oldCEFInterfaces, oldCEFTypes;
 
 type
-  TMyV8Accessor = class(TCefV8AccessorOwn)
+  TMyV8Accessor = class(TOldCefV8AccessorOwn)
     protected
-      FMyVal : ustring;
+      FMyVal : oldustring;
 
-      function Get(const name: ustring; const obj: ICefv8Value; out retval : ICefv8Value; var exception: ustring): Boolean; override;
-      function Put(const name: ustring; const obj, value: ICefv8Value; var exception: ustring): Boolean; override;
+      function Get(const name: oldustring; const obj: IOldCefv8Value; out retval : IOldCefv8Value; var exception: oldustring): Boolean; override;
+      function Put(const name: oldustring; const obj, value: IOldCefv8Value; var exception: oldustring): Boolean; override;
   end;
 
 implementation
 
-function TMyV8Accessor.Get(const name      : ustring;
-                           const obj       : ICefv8Value;
-                           out   retval    : ICefv8Value;
-                           var   exception : ustring): Boolean;
+function TMyV8Accessor.Get(const name      : oldustring;
+                           const obj       : IOldCefv8Value;
+                           out   retval    : IOldCefv8Value;
+                           var   exception : oldustring): Boolean;
 begin
   if (name = 'myval') then
     begin
-      retval := TCefv8ValueRef.NewString(FMyVal);
+      retval := TOldCefv8ValueRef.NewString(FMyVal);
       Result := True;
     end
    else
     Result := False;
 end;
 
-function TMyV8Accessor.Put(const name      : ustring;
-                           const obj       : ICefv8Value;
-                           const value     : ICefv8Value;
-                           var   exception : ustring): Boolean;
+function TMyV8Accessor.Put(const name      : oldustring;
+                           const obj       : IOldCefv8Value;
+                           const value     : IOldCefv8Value;
+                           var   exception : oldustring): Boolean;
 begin
   if (name = 'myval') then
     begin

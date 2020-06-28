@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uJSWindowBindingWithObject in 'uJSWindowBindingWithObject.pas' {JSWindowBindingWithObjectFrm},
   uMyV8Accessor in 'uMyV8Accessor.pas';
 
@@ -57,9 +57,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -69,5 +69,5 @@ begin
       Application.Run;
     end;
 
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

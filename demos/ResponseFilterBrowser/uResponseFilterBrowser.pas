@@ -37,7 +37,7 @@
 
 unit uResponseFilterBrowser;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -50,7 +50,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, SyncObjs, ComCtrls, pngimage,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFConstants, uCEFTypes, uCEFResponseFilter;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFConstants, oldCEFTypes, oldCEFResponseFilter;
 
 const
   STREAM_COPY_COMPLETE    = WM_APP + $B00;
@@ -60,8 +60,8 @@ type
     AddressPnl: TPanel;
     AddressEdt: TEdit;
     Timer1: TTimer;
-    Chromium1: TChromium;
-    CEFWindowParent1: TCEFWindowParent;
+    Chromium1: TOldChromium;
+    CEFWindowParent1: TOldCefWindowParent;
     Splitter1: TSplitter;
     Panel1: TPanel;
     GoBtn: TButton;
@@ -72,13 +72,13 @@ type
     CopyScriptBtn: TRadioButton;
     ReplaceLogoBtn: TRadioButton;
 
-    procedure Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
-    procedure Chromium1GetResourceResponseFilter(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const request: ICefRequest; const response: ICefResponse; out Result: ICefResponseFilter);
-    procedure Chromium1ResourceLoadComplete(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const request: ICefRequest; const response: ICefResponse; status: TCefUrlRequestStatus; receivedContentLength: Int64);
-    procedure Chromium1BeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
-    procedure Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
-    procedure Chromium1LoadStart(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame);
+    procedure Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
+    procedure Chromium1GetResourceResponseFilter(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const request: IOldCefRequest; const response: IOldCefResponse; out Result: IOldCefResponseFilter);
+    procedure Chromium1ResourceLoadComplete(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const request: IOldCefRequest; const response: IOldCefResponse; status: TOldCefUrlRequestStatus; receivedContentLength: Int64);
+    procedure Chromium1BeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean; var Result: Boolean);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
+    procedure Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
+    procedure Chromium1LoadStart(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame);
 
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -88,7 +88,7 @@ type
     procedure GoBtnClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   protected
-    FFilter        : ICefResponseFilter; // CEF Filter interface that receives the resource contents
+    FFilter        : IOldCefResponseFilter; // CEF Filter interface that receives the resource contents
     FStream        : TMemoryStream;      // TMemoryStream to hold the resource contents
     FStreamCS      : TCriticalSection;   // Critical section used to protect the memory stream
     FRscSize       : int64;              // size of the resource if the server sends the Content-Length header
@@ -99,7 +99,7 @@ type
     FReload        : boolean;
 
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure WMMove(var aMessage: TWMMove); message WM_MOVE;
@@ -110,12 +110,12 @@ type
     procedure BrowserDestroyMsg(var aMessage: TMessage); message CEF_DESTROY;
     procedure StreamCopyCompleteMsg(var aMessage : TMessage); message STREAM_COPY_COMPLETE;
 
-    procedure Filter_OnFilter(Sender: TObject; data_in: Pointer; data_in_size: NativeUInt; var data_in_read: NativeUInt; data_out: Pointer; data_out_size : NativeUInt; var data_out_written: NativeUInt; var aResult : TCefResponseFilterStatus);
+    procedure Filter_OnFilter(Sender: TObject; data_in: Pointer; data_in_size: NativeUInt; var data_in_read: NativeUInt; data_out: Pointer; data_out_size : NativeUInt; var data_out_written: NativeUInt; var aResult : TOldCefResponseFilterStatus);
 
-    procedure CopyScript(data_in: Pointer; data_in_size: NativeUInt; var data_in_read: NativeUInt; data_out: Pointer; data_out_size : NativeUInt; var data_out_written: NativeUInt; var aResult : TCefResponseFilterStatus);
-    procedure ReplaceLogo(data_in: Pointer; data_in_size: NativeUInt; var data_in_read: NativeUInt; data_out: Pointer; data_out_size : NativeUInt; var data_out_written: NativeUInt; var aResult : TCefResponseFilterStatus);
+    procedure CopyScript(data_in: Pointer; data_in_size: NativeUInt; var data_in_read: NativeUInt; data_out: Pointer; data_out_size : NativeUInt; var data_out_written: NativeUInt; var aResult : TOldCefResponseFilterStatus);
+    procedure ReplaceLogo(data_in: Pointer; data_in_size: NativeUInt; var data_in_read: NativeUInt; data_out: Pointer; data_out_size : NativeUInt; var data_out_written: NativeUInt; var aResult : TOldCefResponseFilterStatus);
     procedure UpdateRscEncoding(const aMimeType, aContentType : string);
-    function  IsMyResource(const aRequest : ICefRequest) : boolean;
+    function  IsMyResource(const aRequest : IOldCefRequest) : boolean;
     {$IFDEF DELPHI15_UP}
     procedure GetResponseEncoding(const aContentType: string);
     {$ENDIF}
@@ -136,7 +136,7 @@ uses
   {$ELSE}
   Math,
   {$ENDIF}
-  uCEFApplication, uCEFMiscFunctions;
+  oldCEFApplication, oldCEFMiscFunctions;
 
 // This demo uses a TCustomResponseFilter to read the contents from a
 // JavaScript file in briskbard.com into a TMemoryStream. The stream
@@ -147,12 +147,12 @@ uses
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TChromium.CloseBrowser
-//    which triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldChromium.CloseBrowser
+//    which triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy
 //    CEFWindowParent1 in the main thread, which triggers the
-//    TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE
+//    TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE
 //    to the form.
 
 // TCustomResponseFilter.OnFilter event might be called multiple times
@@ -181,7 +181,7 @@ procedure TResponseFilterBrowserFrm.Filter_OnFilter(    Sender           : TObje
                                                         data_out         : Pointer;
                                                         data_out_size    : NativeUInt;
                                                     var data_out_written : NativeUInt;
-                                                    var aResult          : TCefResponseFilterStatus);
+                                                    var aResult          : TOldCefResponseFilterStatus);
 begin
   if CopyScriptBtn.Checked then
     CopyScript(data_in, data_in_size, data_in_read, data_out, data_out_size, data_out_written, aResult)
@@ -195,7 +195,7 @@ procedure TResponseFilterBrowserFrm.CopyScript(    data_in          : Pointer;
                                                    data_out         : Pointer;
                                                    data_out_size    : NativeUInt;
                                                var data_out_written : NativeUInt;
-                                               var aResult          : TCefResponseFilterStatus);
+                                               var aResult          : TOldCefResponseFilterStatus);
 begin
   try
     try
@@ -260,7 +260,7 @@ procedure TResponseFilterBrowserFrm.ReplaceLogo(    data_in          : Pointer;
                                                     data_out         : Pointer;
                                                     data_out_size    : NativeUInt;
                                                 var data_out_written : NativeUInt;
-                                                var aResult          : TCefResponseFilterStatus);
+                                                var aResult          : TOldCefResponseFilterStatus);
 begin
   // The default return value is RESPONSE_FILTER_DONE to stop the filter
   aResult := RESPONSE_FILTER_DONE;
@@ -311,7 +311,7 @@ begin
   end;
 end;
 
-function TResponseFilterBrowserFrm.IsMyResource(const aRequest : ICefRequest) : boolean;
+function TResponseFilterBrowserFrm.IsMyResource(const aRequest : IOldCefRequest) : boolean;
 var
   TempName : string;
 begin
@@ -349,14 +349,14 @@ begin
   FRscSize       := -1;
   FStream        := TMemoryStream.Create;
   FStreamCS      := TCriticalSection.Create;
-  FFilter        := TCustomResponseFilter.Create;
+  FFilter        := TOldCustomResponseFilter.Create;
   FRscEncoding   := TEncoding.Default;
 
   FCanClose := False;
   FClosing  := False;
 
   // This event will receive the data
-  TCustomResponseFilter(FFilter).OnFilter := Filter_OnFilter;
+  TOldCustomResponseFilter(FFilter).OnFilter := Filter_OnFilter;
 end;
 
 procedure TResponseFilterBrowserFrm.FormDestroy(Sender: TObject);
@@ -368,47 +368,47 @@ end;
 
 procedure TResponseFilterBrowserFrm.FormShow(Sender: TObject);
 begin
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1)) then Timer1.Enabled := True;
 end;
 
-procedure TResponseFilterBrowserFrm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TResponseFilterBrowserFrm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   // Now the browser is fully initialized we can send a message to the main form to load the initial web page.
   PostMessage(Handle, CEF_AFTERCREATED, 0, 0);
 end;
 
-procedure TResponseFilterBrowserFrm.Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TResponseFilterBrowserFrm.Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TResponseFilterBrowserFrm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
   Result := (targetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
-procedure TResponseFilterBrowserFrm.Chromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TResponseFilterBrowserFrm.Chromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEF_DESTROY, 0, 0);
   aAction := cbaDelay;
 end;
 
 procedure TResponseFilterBrowserFrm.Chromium1GetResourceResponseFilter(Sender : TObject;
-                                                                       const browser   : ICefBrowser;
-                                                                       const frame     : ICefFrame;
-                                                                       const request   : ICefRequest;
-                                                                       const response  : ICefResponse;
-                                                                       out   Result    : ICefResponseFilter);
+                                                                       const browser   : IOldCefBrowser;
+                                                                       const frame     : IOldCefFrame;
+                                                                       const request   : IOldCefRequest;
+                                                                       const response  : IOldCefResponse;
+                                                                       out   Result    : IOldCefResponseFilter);
 var
   TempContentLength, TempContentEncoding : string;
   TempLen : integer;
@@ -455,8 +455,8 @@ begin
 end;
 
 procedure TResponseFilterBrowserFrm.Chromium1LoadStart(      Sender         : TObject;
-                                                       const browser        : ICefBrowser;
-                                                       const frame          : ICefFrame);
+                                                       const browser        : IOldCefBrowser;
+                                                       const frame          : IOldCefFrame);
 const
   IMAGE_FILENAME = 'jupiter.png';
 var
@@ -498,11 +498,11 @@ begin
 end;
 
 procedure TResponseFilterBrowserFrm.Chromium1ResourceLoadComplete(Sender : TObject;
-                                                                  const browser               : ICefBrowser;
-                                                                  const frame                 : ICefFrame;
-                                                                  const request               : ICefRequest;
-                                                                  const response              : ICefResponse;
-                                                                        status                : TCefUrlRequestStatus;
+                                                                  const browser               : IOldCefBrowser;
+                                                                  const frame                 : IOldCefFrame;
+                                                                  const request               : IOldCefRequest;
+                                                                  const response              : IOldCefResponse;
+                                                                        status                : TOldCefUrlRequestStatus;
                                                                         receivedContentLength : Int64);
 begin
   try
@@ -650,14 +650,14 @@ procedure TResponseFilterBrowserFrm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TResponseFilterBrowserFrm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 {$IFDEF DELPHI15_UP}

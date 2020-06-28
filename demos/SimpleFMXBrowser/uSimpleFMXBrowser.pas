@@ -37,7 +37,7 @@
 
 unit uSimpleFMXBrowser;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -47,15 +47,15 @@ uses
   {$ENDIF}
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Edit, FMX.Controls.Presentation, uFMXWindowParent, uFMXChromium,
-  uCEFInterfaces, uCEFConstants, uCEFTypes;
+  FMX.Edit, FMX.Controls.Presentation, oldFMXWindowParent, oldFMXChromium,
+  oldCEFInterfaces, oldCEFConstants, oldCEFTypes;
 
 type
   TSimpleFMXBrowserFrm = class(TForm)
     AddressPnl: TPanel;
     AddressEdt: TEdit;
     GoBtn: TButton;
-    FMXChromium1: TFMXChromium;
+    FMXChromium1: TOldFMXChromium;
     Timer1: TTimer;
     procedure GoBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -63,24 +63,24 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FMXChromium1AfterCreated(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure FMXChromium1Close(Sender: TObject;
-      const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+      const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
     procedure FMXChromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure FMXChromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures;
-      var windowInfo: TCefWindowInfo; var client: ICefClient;
-      var settings: TCefBrowserSettings; var noJavascriptAccess,
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures;
+      var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+      var settings: TOldCefBrowserSettings; var noJavascriptAccess,
       Result: Boolean);
     procedure FormResize(Sender: TObject);
 
   protected
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TFMXChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldFMXChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     FMXWindowParent : TFMXWindowParent;
@@ -115,7 +115,7 @@ implementation
 // or the domain "google.com". If you don't live in the US, you'll be redirected to
 // another domain which will take a little time too.
 
-// This demo uses a TFMXChromium and a TFMXWindowParent.
+// This demo uses a TOldFMXChromium and a TFMXWindowParent.
 // TFMXApplicationService is used to handle custom Windows messages
 
 // All FMX applications using CEF4Delphi should add the $(FrameworkType) conditional define
@@ -125,37 +125,37 @@ implementation
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TFMXChromium.CloseBrowser which triggers the TFMXChromium.OnClose event.
-// 2. TFMXChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TFMXChromium.OnBeforeClose event.
-// 3. TFMXChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldFMXChromium.CloseBrowser which triggers the TOldFMXChromium.OnClose event.
+// 2. TOldFMXChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TOldFMXChromium.OnBeforeClose event.
+// 3. TOldFMXChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
 uses
   FMX.Platform, FMX.Platform.Win,
-  uCEFMiscFunctions, uCEFApplication, uFMXApplicationService;
+  oldCEFMiscFunctions, oldCEFApplication, uFMXApplicationService;
 
-procedure TSimpleFMXBrowserFrm.FMXChromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TSimpleFMXBrowserFrm.FMXChromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   // Now the browser is fully initialized we can send a message to the main form to load the initial web page.
   PostCustomMessage(CEF_AFTERCREATED);
 end;
 
-procedure TSimpleFMXBrowserFrm.FMXChromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TSimpleFMXBrowserFrm.FMXChromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostCustomMessage(WM_CLOSE);
 end;
 
 procedure TSimpleFMXBrowserFrm.FMXChromium1BeforePopup(      Sender             : TObject;
-                                                       const browser            : ICefBrowser;
-                                                       const frame              : ICefFrame;
-                                                       const targetUrl          : ustring;
-                                                       const targetFrameName    : ustring;
-                                                             targetDisposition  : TCefWindowOpenDisposition;
+                                                       const browser            : IOldCefBrowser;
+                                                       const frame              : IOldCefFrame;
+                                                       const targetUrl          : oldustring;
+                                                       const targetFrameName    : oldustring;
+                                                             targetDisposition  : TOldCefWindowOpenDisposition;
                                                              userGesture        : Boolean;
-                                                       const popupFeatures      : TCefPopupFeatures;
-                                                       var   windowInfo         : TCefWindowInfo;
-                                                       var   client             : ICefClient;
-                                                       var   settings           : TCefBrowserSettings;
+                                                       const popupFeatures      : TOldCefPopupFeatures;
+                                                       var   windowInfo         : TOldCefWindowInfo;
+                                                       var   client             : IOldCefClient;
+                                                       var   settings           : TOldCefBrowserSettings;
                                                        var   noJavascriptAccess : boolean;
                                                        var   Result             : boolean);
 begin
@@ -163,7 +163,7 @@ begin
   Result := (targetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
-procedure TSimpleFMXBrowserFrm.FMXChromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TSimpleFMXBrowserFrm.FMXChromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostCustomMessage(CEF_DESTROY);
   aAction := cbaDelay;
@@ -241,7 +241,7 @@ begin
   // This will trigger the AfterCreated event when the browser is fully
   // initialized and ready to receive commands.
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(FMXChromium1.Initialized) then
     begin

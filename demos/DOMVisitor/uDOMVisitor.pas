@@ -37,7 +37,7 @@
 
 unit uDOMVisitor;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -50,7 +50,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Menus,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Types, ComCtrls, ClipBrd,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants;
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFApplication, oldCEFTypes, oldCEFConstants;
 
 const
   MINIBROWSER_VISITDOM_PARTIAL            = WM_APP + $101;
@@ -66,8 +66,8 @@ const
 
 type
   TDOMVisitorFrm = class(TForm)
-    CEFWindowParent1: TCEFWindowParent;
-    Chromium1: TChromium;
+    CEFWindowParent1: TOldCefWindowParent;
+    Chromium1: TOldChromium;
     AddressBarPnl: TPanel;
     AddressEdt: TEdit;
     StatusBar1: TStatusBar;
@@ -78,37 +78,37 @@ type
     procedure GoBtnClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Chromium1AfterCreated(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure Chromium1BeforeContextMenu(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; const model: ICefMenuModel);
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
     procedure Chromium1ContextMenuCommand(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame;
-      const params: ICefContextMenuParams; commandId: Integer;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame;
+      const params: IOldCefContextMenuParams; commandId: Integer;
       eventFlags: Cardinal; out Result: Boolean);
     procedure Chromium1ProcessMessageReceived(Sender: TObject;
-      const browser: ICefBrowser; sourceProcess: TCefProcessId;
-      const message: ICefProcessMessage; out Result: Boolean);
+      const browser: IOldCefBrowser; sourceProcess: TOldCefProcessId;
+      const message: IOldCefProcessMessage; out Result: Boolean);
     procedure Timer1Timer(Sender: TObject);
     procedure VisitDOMBtnClick(Sender: TObject);
     procedure Chromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo;
-      var client: ICefClient; var settings: TCefBrowserSettings;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo;
+      var client: IOldCefClient; var settings: TOldCefBrowserSettings;
       var noJavascriptAccess: Boolean; var Result: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
   private
     { Private declarations }
   protected
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure BrowserCreatedMsg(var aMessage : TMessage); message CEF_AFTERCREATED;
@@ -126,26 +126,26 @@ type
 var
   DOMVisitorFrm: TDOMVisitorFrm;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 
 implementation
 
 {$R *.dfm}
 
 uses
-  uCEFProcessMessage, uCEFMiscFunctions, uCEFSchemeRegistrar, uCEFRenderProcessHandler,
-  uCEFv8Handler, uCEFDomVisitor, uCEFDomNode, uCEFTask;
+  oldCEFProcessMessage, oldCEFMiscFunctions, oldCEFSchemeRegistrar, oldCEFRenderProcessHandler,
+  oldCEFv8Handler, oldCEFDomVisitor, oldCEFDomNode, oldCEFTask;
 
 // This demo sends messages from the browser process to the render process,
 // and from the render process to the browser process.
 
-// To send a message from the browser process you must use the TChromium.SendProcessMessage
+// To send a message from the browser process you must use the TOldChromium.SendProcessMessage
 // procedure with a PID_RENDERER parameter. The render process receives those messages in
-// the GlobalCEFApp.OnProcessMessageReceived event.
+// the GlobalOldCEFApp.OnProcessMessageReceived event.
 
 // To send messages from the render process you must use the browser.SendProcessMessage
 // procedure with a PID_BROWSER parameter. The browser process receives those messages in
-// the TChromium.OnProcessMessageReceived event.
+// the TOldChromium.OnProcessMessageReceived event.
 
 // message.name is used to identify different messages sent with SendProcessMessage.
 
@@ -154,13 +154,13 @@ uses
 
 // Destruction steps
 // =================
-// 1. FormCloseQuery sets CanClose to FALSE calls TChromium.CloseBrowser which triggers the TChromium.OnClose event.
-// 2. TChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TChromium.OnBeforeClose event.
-// 3. TChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery sets CanClose to FALSE calls TOldChromium.CloseBrowser which triggers the TOldChromium.OnClose event.
+// 2. TOldChromium.OnClose sends a CEFBROWSER_DESTROY message to destroy CEFWindowParent1 in the main thread, which triggers the TOldChromium.OnBeforeClose event.
+// 3. TOldChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
-procedure SimpleDOMIteration(const aDocument: ICefDomDocument);
+procedure SimpleDOMIteration(const aDocument: IOldCefDomDocument);
 var
-  TempHead, TempChild : ICefDomNode;
+  TempHead, TempChild : IOldCefDomNode;
 begin
   try
     if (aDocument <> nil) then
@@ -184,11 +184,11 @@ begin
   end;
 end;
 
-procedure SimpleNodeSearch(const aDocument: ICefDomDocument);
+procedure SimpleNodeSearch(const aDocument: IOldCefDomDocument);
 const
   NODE_ID = 'lst-ib'; // input box node found in google.com homepage
 var
-  TempNode : ICefDomNode;
+  TempNode : IOldCefDomNode;
 begin
   try
     if (aDocument <> nil) then
@@ -215,9 +215,9 @@ begin
   end;
 end;
 
-procedure DOMVisitor_OnDocAvailable(const browser: ICefBrowser; const document: ICefDomDocument);
+procedure DOMVisitor_OnDocAvailable(const browser: IOldCefBrowser; const document: IOldCefDomDocument);
 var
-  msg: ICefProcessMessage;
+  msg: IOldCefProcessMessage;
 begin
   // This function is called from a different process.
   // document is only valid inside this function.
@@ -238,30 +238,30 @@ begin
   // Sending back some custom results to the browser process
   // Notice that the DOMVISITOR_MSGNAME_PARTIAL message name needs to be recognized in
   // Chromium1ProcessMessageReceived
-  msg := TCefProcessMessageRef.New(DOMVISITOR_MSGNAME_PARTIAL);
+  msg := TOldCefProcessMessageRef.New(DOMVISITOR_MSGNAME_PARTIAL);
   msg.ArgumentList.SetString(0, 'document.Title : ' + document.Title);
   browser.SendProcessMessage(PID_BROWSER, msg);
 end;
 
-procedure DOMVisitor_OnDocAvailableFullMarkup(const browser: ICefBrowser; const document: ICefDomDocument);
+procedure DOMVisitor_OnDocAvailableFullMarkup(const browser: IOldCefBrowser; const document: IOldCefDomDocument);
 var
-  msg: ICefProcessMessage;
+  msg: IOldCefProcessMessage;
 begin
   // Sending back some custom results to the browser process
   // Notice that the DOMVISITOR_MSGNAME_FULL message name needs to be recognized in
   // Chromium1ProcessMessageReceived
-  msg := TCefProcessMessageRef.New(DOMVISITOR_MSGNAME_FULL);
+  msg := TOldCefProcessMessageRef.New(DOMVISITOR_MSGNAME_FULL);
   msg.ArgumentList.SetString(0, document.Body.AsMarkup);
   browser.SendProcessMessage(PID_BROWSER, msg);
 end;
 
-procedure GlobalCEFApp_OnProcessMessageReceived(const browser       : ICefBrowser;
-                                                      sourceProcess : TCefProcessId;
-                                                const message       : ICefProcessMessage;
+procedure GlobalOldCEFApp_OnProcessMessageReceived(const browser       : IOldCefBrowser;
+                                                      sourceProcess : TOldCefProcessId;
+                                                const message       : IOldCefProcessMessage;
                                                 var   aHandled      : boolean);
 var
-  TempFrame   : ICefFrame;
-  TempVisitor : TCefFastDomVisitor2;
+  TempFrame   : IOldCefFrame;
+  TempVisitor : TOldCefFastDomVisitor2;
 begin
   aHandled := False;
 
@@ -273,7 +273,7 @@ begin
 
           if (TempFrame <> nil) then
             begin
-              TempVisitor := TCefFastDomVisitor2.Create(browser, DOMVisitor_OnDocAvailable);
+              TempVisitor := TOldCefFastDomVisitor2.Create(browser, DOMVisitor_OnDocAvailable);
               TempFrame.VisitDom(TempVisitor);
             end;
 
@@ -286,7 +286,7 @@ begin
 
             if (TempFrame <> nil) then
               begin
-                TempVisitor := TCefFastDomVisitor2.Create(browser, DOMVisitor_OnDocAvailableFullMarkup);
+                TempVisitor := TOldCefFastDomVisitor2.Create(browser, DOMVisitor_OnDocAvailableFullMarkup);
                 TempFrame.VisitDom(TempVisitor);
               end;
 
@@ -295,45 +295,45 @@ begin
     end;
 end;
 
-procedure CreateGlobalCEFApp;
+procedure CreateGlobalOldCEFApp;
 begin
-  GlobalCEFApp                          := TCefApplication.Create;
-  GlobalCEFApp.RemoteDebuggingPort      := 9000;
-  GlobalCEFApp.OnProcessMessageReceived := GlobalCEFApp_OnProcessMessageReceived;
+  GlobalOldCEFApp                          := TOldCefApplication.Create;
+  GlobalOldCEFApp.RemoteDebuggingPort      := 9000;
+  GlobalOldCEFApp.OnProcessMessageReceived := GlobalOldCEFApp_OnProcessMessageReceived;
 
   // Enabling the debug log file for then DOM visitor demo.
   // This adds lots of warnings to the console, specially if you run this inside VirtualBox.
   // Remove it if you don't want to use the DOM visitor
-  GlobalCEFApp.LogFile              := 'debug.log';
-  GlobalCEFApp.LogSeverity          := LOGSEVERITY_ERROR;
+  GlobalOldCEFApp.LogFile              := 'debug.log';
+  GlobalOldCEFApp.LogSeverity          := LOGSEVERITY_ERROR;
 end;
 
-procedure TDOMVisitorFrm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TDOMVisitorFrm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   PostMessage(Handle, CEF_AFTERCREATED, 0, 0);
 end;
 
 procedure TDOMVisitorFrm.Chromium1BeforeClose(Sender: TObject;
-  const browser: ICefBrowser);
+  const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TDOMVisitorFrm.Chromium1BeforeContextMenu(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const params: ICefContextMenuParams; const model: ICefMenuModel);
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const params: IOldCefContextMenuParams; const model: IOldCefMenuModel);
 begin
   model.AddItem(MINIBROWSER_CONTEXTMENU_VISITDOM_PARTIAL,  'Visit DOM in CEF (only Title)');
   model.AddItem(MINIBROWSER_CONTEXTMENU_VISITDOM_FULL,     'Visit DOM in CEF (BODY HTML)');
 end;
 
 procedure TDOMVisitorFrm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
@@ -341,15 +341,15 @@ begin
 end;
 
 procedure TDOMVisitorFrm.Chromium1Close(Sender: TObject;
-  const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+  const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEF_DESTROY, 0, 0);
   aAction := cbaDelay;
 end;
 
 procedure TDOMVisitorFrm.Chromium1ContextMenuCommand(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame;
-  const params: ICefContextMenuParams; commandId: Integer;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame;
+  const params: IOldCefContextMenuParams; commandId: Integer;
   eventFlags: Cardinal; out Result: Boolean);
 begin
   Result := False;
@@ -364,8 +364,8 @@ begin
 end;
 
 procedure TDOMVisitorFrm.Chromium1ProcessMessageReceived(Sender: TObject;
-  const browser: ICefBrowser; sourceProcess: TCefProcessId;
-  const message: ICefProcessMessage; out Result: Boolean);
+  const browser: IOldCefBrowser; sourceProcess: TOldCefProcessId;
+  const message: IOldCefProcessMessage; out Result: Boolean);
 begin
   Result := False;
 
@@ -408,7 +408,7 @@ end;
 
 procedure TDOMVisitorFrm.FormShow(Sender: TObject);
 begin
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1, '')) then Timer1.Enabled := True;
 end;
@@ -437,19 +437,19 @@ end;
 
 procedure TDOMVisitorFrm.VisitDOMMsg(var aMessage : TMessage);
 var
-  TempMsg : ICefProcessMessage;
+  TempMsg : IOldCefProcessMessage;
 begin
   // Use the ArgumentList property if you need to pass some parameters.
-  TempMsg := TCefProcessMessageRef.New(RETRIEVEDOM_MSGNAME_PARTIAL); // Same name than TCefCustomRenderProcessHandler.MessageName
+  TempMsg := TOldCefProcessMessageRef.New(RETRIEVEDOM_MSGNAME_PARTIAL); // Same name than TOldCefCustomRenderProcessHandler.MessageName
   Chromium1.SendProcessMessage(PID_RENDERER, TempMsg);
 end;
 
 procedure TDOMVisitorFrm.VisitDOM2Msg(var aMessage : TMessage);
 var
-  TempMsg : ICefProcessMessage;
+  TempMsg : IOldCefProcessMessage;
 begin
   // Use the ArgumentList property if you need to pass some parameters.
-  TempMsg := TCefProcessMessageRef.New(RETRIEVEDOM_MSGNAME_FULL); // Same name than TCefCustomRenderProcessHandler.MessageName
+  TempMsg := TOldCefProcessMessageRef.New(RETRIEVEDOM_MSGNAME_FULL); // Same name than TOldCefCustomRenderProcessHandler.MessageName
   Chromium1.SendProcessMessage(PID_RENDERER, TempMsg);
 end;
 

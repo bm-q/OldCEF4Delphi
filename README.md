@@ -1,4 +1,7 @@
 # OldCEF4Delphi
+
+**This fork of OldCEF4Delphi** is functionally identical to the original one by Salvador Diaz Fau except for the fact the everything relevant (classes, interfaces, pointers, units) has been renamed to work side by side with CEF4Delphi.
+
 OldCEF4Delphi is an open source project to embed Chromium-based browsers in applications made with Delphi.
 
 OldCEF4Delphi is based on DCEF3, made by Henri Gourvest. The original license of DCEF3 still applies to OldCEF4Delphi. Read the license terms in the first lines of any *.pas file.

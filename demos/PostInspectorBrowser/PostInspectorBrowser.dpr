@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication, uCEFConstants,
+  oldCefApplication, oldCefConstants,
   uPostInspectorBrowser in 'uPostInspectorBrowser.pas' {Form1};
 
 {$R *.res}
@@ -57,9 +57,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -69,6 +69,6 @@ begin
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
-  GlobalCEFApp := nil;
+  GlobalOldCEFApp.Free;
+  GlobalOldCEFApp := nil;
 end.

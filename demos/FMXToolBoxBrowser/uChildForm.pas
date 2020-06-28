@@ -45,11 +45,11 @@ uses
   {$ENDIF}
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  uFMXChromium, uFMXWindowParent, uCEFInterfaces, uCEFConstants, uCEFTypes;
+  oldFMXChromium, oldFMXWindowParent, oldCEFInterfaces, oldCEFConstants, oldCEFTypes;
 
 type
   TChildForm = class(TForm)
-    FMXChromium1: TFMXChromium;
+    FMXChromium1: TOldFMXChromium;
 
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -58,13 +58,13 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormDestroy(Sender: TObject);
 
-    procedure FMXChromium1BeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess, Result: Boolean);
-    procedure FMXChromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
-    procedure FMXChromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+    procedure FMXChromium1BeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess, Result: Boolean);
+    procedure FMXChromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
+    procedure FMXChromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 
   protected
     // Variables to control when can we destroy the form safely
-    FCanClose       : boolean;  // Set to True in TFMXChromium.OnBeforeClose
+    FCanClose       : boolean;  // Set to True in TOldFMXChromium.OnBeforeClose
     FClosing        : boolean;  // Set to True in the CloseQuery event.
     FMXWindowParent : TFMXWindowParent;
     FHomepage       : string;
@@ -91,13 +91,13 @@ implementation
 
 uses
   FMX.Platform, FMX.Platform.Win,
-  uCEFMiscFunctions, uCEFApplication, uFMXApplicationService, uMainForm;
+  oldCEFMiscFunctions, oldCEFApplication, uFMXApplicationService, uMainForm;
 
 // Child destruction steps
 // =======================
-// 1. FormCloseQuery calls TFMXChromium.CloseBrowser
-// 2. TFMXChromium.OnClose sends a CEF_DESTROY message to destroy FMXWindowParent in the main thread.
-// 3. TFMXChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
+// 1. FormCloseQuery calls TOldFMXChromium.CloseBrowser
+// 2. TOldFMXChromium.OnClose sends a CEF_DESTROY message to destroy FMXWindowParent in the main thread.
+// 3. TOldFMXChromium.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
 
 function TChildForm.PostCustomMessage(aMessage, wParam : cardinal; lParam : integer) : boolean;
@@ -139,25 +139,25 @@ begin
     FMXWindowParent.SetBounds(0, 0, ClientWidth - 1, ClientHeight -  1);
 end;
 
-procedure TChildForm.FMXChromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TChildForm.FMXChromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostCustomMessage(WM_CLOSE);
 end;
 
 procedure TChildForm.FMXChromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess,
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess,
   Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
   Result := (targetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
-procedure TChildForm.FMXChromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TChildForm.FMXChromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostCustomMessage(CEF_DESTROY, 0, BrowserID);
   aAction := cbaDelay;
@@ -235,7 +235,7 @@ end;
 
 procedure TChildForm.DoDestroyParent;
 begin
-  // We destroy FMXWindowParent safely in the main thread and this will trigger the TFMXChromium.OnBeforeClose event.
+  // We destroy FMXWindowParent safely in the main thread and this will trigger the TOldFMXChromium.OnBeforeClose event.
   if (FMXWindowParent <> nil) then FreeAndNil(FMXWindowParent);
 end;
 

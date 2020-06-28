@@ -37,7 +37,7 @@
 
 unit uCustomResourceHandler;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 uses
@@ -46,10 +46,10 @@ uses
   {$ELSE}
   Classes, Windows, SysUtils,
   {$ENDIF}
-  uCEFInterfaces, uCEFTypes, uCEFResourceHandler;
+  oldCEFInterfaces, oldCEFTypes, oldCEFResourceHandler;
 
 type
-  TCustomResourceHandler = class(TCefResourceHandlerOwn)
+  TCustomResourceHandler = class(TOldCefResourceHandlerOwn)
     private
       FStream      : TMemoryStream;
       FMimeType    : string;
@@ -57,23 +57,23 @@ type
       FStatus      : Integer;
 
     protected
-      function  ProcessRequest(const request: ICefRequest; const callback: ICefCallback): Boolean; override;
-      procedure GetResponseHeaders(const response: ICefResponse; out responseLength: Int64; out redirectUrl: ustring); override;
-      function  ReadResponse(const dataOut: Pointer; bytesToRead: Integer; var bytesRead: Integer; const callback: ICefCallback): Boolean; override;
+      function  ProcessRequest(const request: IOldCefRequest; const callback: IOldCefCallback): Boolean; override;
+      procedure GetResponseHeaders(const response: IOldCefResponse; out responseLength: Int64; out redirectUrl: oldustring); override;
+      function  ReadResponse(const dataOut: Pointer; bytesToRead: Integer; var bytesRead: Integer; const callback: IOldCefCallback): Boolean; override;
 
     public
-      constructor Create(const browser: ICefBrowser; const frame: ICefFrame; const schemeName: ustring; const request: ICefRequest; const aStream : TStream; const aMimeType : ustring); reintroduce;
+      constructor Create(const browser: IOldCefBrowser; const frame: IOldCefFrame; const schemeName: oldustring; const request: IOldCefRequest; const aStream : TStream; const aMimeType : oldustring); reintroduce;
       destructor  Destroy; override;
   end;
 
 implementation
 
-constructor TCustomResourceHandler.Create(const browser    : ICefBrowser;
-                                          const frame      : ICefFrame;
-                                          const schemeName : ustring;
-                                          const request    : ICefRequest;
+constructor TCustomResourceHandler.Create(const browser    : IOldCefBrowser;
+                                          const frame      : IOldCefFrame;
+                                          const schemeName : oldustring;
+                                          const request    : IOldCefRequest;
                                           const aStream    : TStream;
-                                          const aMimeType  : ustring);
+                                          const aMimeType  : oldustring);
 begin
   inherited Create(browser, frame, schemeName, request);
 
@@ -96,9 +96,9 @@ begin
   inherited Destroy;
 end;
 
-procedure TCustomResourceHandler.GetResponseHeaders(const response       : ICefResponse;
+procedure TCustomResourceHandler.GetResponseHeaders(const response       : IOldCefResponse;
                                                     out   responseLength : Int64;
-                                                    out   redirectUrl    : ustring);
+                                                    out   redirectUrl    : oldustring);
 begin
   if (response <> nil) then
     begin
@@ -113,7 +113,7 @@ begin
     responseLength := 0;
 end;
 
-function TCustomResourceHandler.ProcessRequest(const request : ICefRequest; const callback : ICefCallback): Boolean;
+function TCustomResourceHandler.ProcessRequest(const request : IOldCefRequest; const callback : IOldCefCallback): Boolean;
 begin
   Result      := True;
   FStatus     := 200;
@@ -126,7 +126,7 @@ end;
 function TCustomResourceHandler.ReadResponse(const dataOut     : Pointer;
                                                    bytesToRead : Integer;
                                              var   bytesRead   : Integer;
-                                             const callback    : ICefCallback): Boolean;
+                                             const callback    : IOldCefCallback): Boolean;
 begin
   if (FStream <> nil) and (DataOut <> nil) then
     begin

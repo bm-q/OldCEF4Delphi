@@ -52,7 +52,7 @@ object SimpleFMXBrowserFrm: TSimpleFMXBrowserFrm
     Left = 40
     Top = 129
   end
-  object FMXChromium1: TFMXChromium
+  object FMXChromium1: TOldFMXChromium
     OnBeforePopup = FMXChromium1BeforePopup
     OnAfterCreated = FMXChromium1AfterCreated
     OnBeforeClose = FMXChromium1BeforeClose

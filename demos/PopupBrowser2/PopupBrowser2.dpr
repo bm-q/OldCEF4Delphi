@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uMainForm in 'uMainForm.pas' {MainForm},
   uChildForm in 'uChildForm.pas' {ChildForm};
 
@@ -58,11 +58,11 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp                            := TCefApplication.Create;
-  GlobalCEFApp.FlashEnabled               := False;
-  GlobalCEFApp.EnableHighDPISupport       := True;
+  GlobalOldCEFApp                            := TOldCefApplication.Create;
+  GlobalOldCEFApp.FlashEnabled               := False;
+  GlobalOldCEFApp.EnableHighDPISupport       := True;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -72,5 +72,5 @@ begin
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

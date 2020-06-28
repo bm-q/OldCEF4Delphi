@@ -54,7 +54,7 @@ object JSExtensionWithFunctionFrm: TJSExtensionWithFunctionFrm
       OnClick = GoBtnClick
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 30
     Width = 978
@@ -72,7 +72,7 @@ object JSExtensionWithFunctionFrm: TJSExtensionWithFunctionFrm
         Width = 500
       end>
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnProcessMessageReceived = Chromium1ProcessMessageReceived
     OnBeforePopup = Chromium1BeforePopup
     OnAfterCreated = Chromium1AfterCreated

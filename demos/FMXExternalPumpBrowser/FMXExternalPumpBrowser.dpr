@@ -46,8 +46,8 @@ uses
   WinApi.Windows,
   {$ENDIF}
   System.SysUtils,
-  uCEFApplication,
-  uFMXWorkScheduler,
+  oldCefApplication,
+  oldFMXWorkScheduler,
   uFMXExternalPumpBrowser in 'uFMXExternalPumpBrowser.pas' {FMXExternalPumpBrowserFrm},
   uFMXApplicationService in 'uFMXApplicationService.pas';
 
@@ -60,16 +60,16 @@ uses
 
 begin
   // GlobalFMXWorkScheduler needs to be created before the
-  // GlobalCEFApp.StartMainProcess call.
-  GlobalFMXWorkScheduler := TFMXWorkScheduler.Create(nil);
+  // GlobalOldCEFApp.StartMainProcess call.
+  GlobalOldFMXWorkScheduler := TOldFMXWorkScheduler.Create(nil);
 
-  GlobalCEFApp                            := TCefApplication.Create;
-  GlobalCEFApp.WindowlessRenderingEnabled := True;
-  GlobalCEFApp.EnableHighDPISupport       := True;
-  GlobalCEFApp.FlashEnabled               := False;
-  GlobalCEFApp.MultiThreadedMessageLoop   := False;
+  GlobalOldCEFApp                            := TOldCefApplication.Create;
+  GlobalOldCEFApp.WindowlessRenderingEnabled := True;
+  GlobalOldCEFApp.EnableHighDPISupport       := True;
+  GlobalOldCEFApp.FlashEnabled               := False;
+  GlobalOldCEFApp.MultiThreadedMessageLoop   := False;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.CreateForm(TFMXExternalPumpBrowserFrm, FMXExternalPumpBrowserFrm);
@@ -78,9 +78,9 @@ begin
       // The form needs to be destroyed *BEFORE* stopping the scheduler.
       FMXExternalPumpBrowserFrm.Free;
 
-      GlobalFMXWorkScheduler.StopScheduler;
+      GlobalOldFMXWorkScheduler.StopScheduler;
     end;
 
-  FreeAndNil(GlobalCEFApp);
-  FreeAndNil(GlobalFMXWorkScheduler);
+  FreeAndNil(GlobalOldCEFApp);
+  FreeAndNil(GlobalOldFMXWorkScheduler);
 end.

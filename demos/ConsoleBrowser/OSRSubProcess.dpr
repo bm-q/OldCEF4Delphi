@@ -45,8 +45,8 @@ uses
   {$ELSE}
   Windows,
   {$ENDIF}
-  uCEFApplication,
-  uCEFConstants;
+  oldCefApplication,
+  oldCefConstants;
 
 // CEF3 needs to set the LARGEADDRESSAWARE flag which allows 32-bit processes to use up to 3GB of RAM.
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
@@ -54,7 +54,7 @@ uses
 // To test this demo you need to build the ConsoleLoader, OSRDLLBrowser and OSRSubProcess projects found in this directory.
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
   // The main process and the subprocess *MUST* have the same FrameworkDirPath, ResourcesDirPath,
   // LocalesDirPath, cache, cookies and UserDataPath paths
@@ -64,23 +64,23 @@ begin
 
   // In case you want to use custom directories for the CEF3 binaries, cache, cookies and user data.
 {
-  GlobalCEFApp.FrameworkDirPath     := 'cef';
-  GlobalCEFApp.ResourcesDirPath     := 'cef';
-  GlobalCEFApp.LocalesDirPath       := 'cef\locales';
-  GlobalCEFApp.cache                := 'cef\cache';
-  GlobalCEFApp.cookies              := 'cef\cookies';
-  GlobalCEFApp.UserDataPath         := 'cef\User Data';
-  GlobalCEFApp.LogFile              := 'debug.log';
-  GlobalCEFApp.LogSeverity          := LOGSEVERITY_INFO;
+  GlobalOldCEFApp.FrameworkDirPath     := 'cef';
+  GlobalOldCEFApp.ResourcesDirPath     := 'cef';
+  GlobalOldCEFApp.LocalesDirPath       := 'cef\locales';
+  GlobalOldCEFApp.cache                := 'cef\cache';
+  GlobalOldCEFApp.cookies              := 'cef\cookies';
+  GlobalOldCEFApp.UserDataPath         := 'cef\User Data';
+  GlobalOldCEFApp.LogFile              := 'debug.log';
+  GlobalOldCEFApp.LogSeverity          := LOGSEVERITY_INFO;
 }
 
-  GlobalCEFApp.WindowlessRenderingEnabled := True;
-  GlobalCEFApp.EnableHighDPISupport       := True;
-  GlobalCEFApp.SetCurrentDir              := True;
-  GlobalCEFApp.MultiThreadedMessageLoop   := False;
+  GlobalOldCEFApp.WindowlessRenderingEnabled := True;
+  GlobalOldCEFApp.EnableHighDPISupport       := True;
+  GlobalOldCEFApp.SetCurrentDir              := True;
+  GlobalOldCEFApp.MultiThreadedMessageLoop   := False;
 
-  GlobalCEFApp.StartSubProcess;
-  GlobalCEFApp.Free;
-  GlobalCEFApp := nil;
+  GlobalOldCEFApp.StartSubProcess;
+  GlobalOldCEFApp.Free;
+  GlobalOldCEFApp := nil;
 end.
 

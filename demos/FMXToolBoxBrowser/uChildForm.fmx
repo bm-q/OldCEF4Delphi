@@ -17,7 +17,7 @@ object ChildForm: TChildForm
   OnResize = FormResize
   OnShow = FormShow
   DesignerMasterStyle = 0
-  object FMXChromium1: TFMXChromium
+  object FMXChromium1: TOldFMXChromium
     OnBeforePopup = FMXChromium1BeforePopup
     OnBeforeClose = FMXChromium1BeforeClose
     OnClose = FMXChromium1Close

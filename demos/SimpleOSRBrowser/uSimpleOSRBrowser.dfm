@@ -102,7 +102,7 @@ object Form1: TForm1
       end
     end
   end
-  object Panel1: TBufferPanel
+  object Panel1: TOldBufferPanel
     Left = 0
     Top = 30
     Width = 800
@@ -120,7 +120,7 @@ object Form1: TForm1
     OnResize = Panel1Resize
     OnMouseLeave = Panel1MouseLeave
   end
-  object chrmosr: TChromium
+  object chrmosr: TOldChromium
     OnTooltip = chrmosrTooltip
     OnBeforePopup = chrmosrBeforePopup
     OnAfterCreated = chrmosrAfterCreated

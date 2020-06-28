@@ -37,7 +37,7 @@
 
 unit uChildForm;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -50,15 +50,15 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, SyncObjs,
   Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, AppEvnts,
   {$ENDIF}
-  uCEFChromium, uCEFTypes, uCEFInterfaces, uCEFConstants, uBufferPanel;
+  oldCEFChromium, oldCEFTypes, oldCEFInterfaces, oldCEFConstants, oldBufferPanel;
 
 const
   CEF_SHOWCHILD = WM_APP + $A52;
 
 type
   TChildForm = class(TForm)
-    Chromium1: TChromium;
-    Panel1: TBufferPanel;
+    Chromium1: TOldChromium;
+    Panel1: TOldBufferPanel;
 
     procedure Panel1Enter(Sender: TObject);
     procedure Panel1Exit(Sender: TObject);
@@ -77,17 +77,17 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 
-    procedure Chromium1Paint(Sender: TObject; const browser: ICefBrowser; kind: TCefPaintElementType; dirtyRectsCount: NativeUInt; const dirtyRects: PCefRectArray; const buffer: Pointer; width, height: Integer);
-    procedure Chromium1CursorChange(Sender: TObject; const browser: ICefBrowser; cursor: HICON; cursorType: TCefCursorType; const customCursorInfo: PCefCursorInfo);
-    procedure Chromium1GetViewRect(Sender: TObject; const browser: ICefBrowser; var rect: TCefRect; out Result: Boolean);
-    procedure Chromium1GetScreenPoint(Sender: TObject; const browser: ICefBrowser; viewX, viewY: Integer; var screenX, screenY: Integer; out Result: Boolean);
-    procedure Chromium1GetScreenInfo(Sender: TObject; const browser: ICefBrowser; var screenInfo: TCefScreenInfo; out Result: Boolean);
-    procedure Chromium1PopupShow(Sender: TObject; const browser: ICefBrowser; show: Boolean);
-    procedure Chromium1PopupSize(Sender: TObject; const browser: ICefBrowser; const rect: PCefRect);
-    procedure Chromium1Tooltip(Sender: TObject; const browser: ICefBrowser; var text: ustring; out Result: Boolean);
-    procedure Chromium1BeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var noJavascriptAccess, Result: Boolean);
-    procedure Chromium1TitleChange(Sender: TObject; const browser: ICefBrowser; const title: ustring);
-    procedure Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+    procedure Chromium1Paint(Sender: TObject; const browser: IOldCefBrowser; kind: TOldCefPaintElementType; dirtyRectsCount: NativeUInt; const dirtyRects: POldCefRectArray; const buffer: Pointer; width, height: Integer);
+    procedure Chromium1CursorChange(Sender: TObject; const browser: IOldCefBrowser; cursor: HICON; cursorType: TOldCefCursorType; const customCursorInfo: POldCefCursorInfo);
+    procedure Chromium1GetViewRect(Sender: TObject; const browser: IOldCefBrowser; var rect: TOldCefRect; out Result: Boolean);
+    procedure Chromium1GetScreenPoint(Sender: TObject; const browser: IOldCefBrowser; viewX, viewY: Integer; var screenX, screenY: Integer; out Result: Boolean);
+    procedure Chromium1GetScreenInfo(Sender: TObject; const browser: IOldCefBrowser; var screenInfo: TOldCefScreenInfo; out Result: Boolean);
+    procedure Chromium1PopupShow(Sender: TObject; const browser: IOldCefBrowser; show: Boolean);
+    procedure Chromium1PopupSize(Sender: TObject; const browser: IOldCefBrowser; const rect: POldCefRect);
+    procedure Chromium1Tooltip(Sender: TObject; const browser: IOldCefBrowser; var text: oldustring; out Result: Boolean);
+    procedure Chromium1BeforePopup(Sender: TObject; const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl, targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo; var client: IOldCefClient; var settings: TOldCefBrowserSettings; var noJavascriptAccess, Result: Boolean);
+    procedure Chromium1TitleChange(Sender: TObject; const browser: IOldCefBrowser; const title: oldustring);
+    procedure Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 
   protected
     FPopUpBitmap       : TBitmap;
@@ -99,15 +99,15 @@ type
     FClosing           : boolean;
     FClientInitialized : boolean;
     FResizeCS          : TCriticalSection;
-    FPopupFeatures     : TCefPopupFeatures;
+    FPopupFeatures     : TOldCefPopupFeatures;
 
     FLastClickCount  : integer;
     FLastClickTime   : integer;
     FLastClickPoint  : TPoint;
     FLastClickButton : TMouseButton;
 
-    function  getModifiers(Shift: TShiftState): TCefEventFlags;
-    function  GetButton(Button: TMouseButton): TCefMouseButtonType;
+    function  getModifiers(Shift: TShiftState): TOldCefEventFlags;
+    function  GetButton(Button: TMouseButton): TOldCefMouseButtonType;
     procedure DoResize;
     procedure InitializeLastClick;
     function  CancelPreviousClick(x, y : integer; var aCurrentTime : integer) : boolean;
@@ -122,7 +122,7 @@ type
     procedure ShowChildMsg(var aMessage : TMessage); message CEF_SHOWCHILD;
 
   public
-    function  CreateClientHandler(var windowInfo : TCefWindowInfo; var client : ICefClient; const targetFrameName : string; const popupFeatures : TCefPopupFeatures) : boolean;
+    function  CreateClientHandler(var windowInfo : TOldCefWindowInfo; var client : IOldCefClient; const targetFrameName : string; const popupFeatures : TOldCefPopupFeatures) : boolean;
     procedure ApplyPopupFeatures;
     procedure HandleSysCharMsg(var Msg: tagMSG; var Handled: Boolean);
     procedure HandleSysKeyDownMsg(var Msg: tagMSG; var Handled: Boolean);
@@ -146,7 +146,7 @@ uses
   {$ELSE}
   Math,
   {$ENDIF}
-  uCEFMiscFunctions, uCEFApplication, uMainForm;
+  oldCEFMiscFunctions, oldCEFApplication, uMainForm;
 
 // This is the destruction sequence in OSR mode :
 // 1- FormCloseQuery sets CanClose to the initial FCanClose value (False) and calls chrmosr.CloseBrowser(True).
@@ -157,12 +157,12 @@ uses
 
 procedure TChildForm.HandleSysCharMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempKeyEvent : TCefKeyEvent;
+  TempKeyEvent : TOldCefKeyEvent;
 begin
   if Panel1.Focused then
     begin
       TempKeyEvent.kind                    := KEYEVENT_CHAR;
-      TempKeyEvent.modifiers               := GetCefKeyboardModifiers(Msg.wParam, Msg.lParam);
+      TempKeyEvent.modifiers               := GeTOldCefKeyboardModifiers(Msg.wParam, Msg.lParam);
       TempKeyEvent.windows_key_code        := Msg.wParam;
       TempKeyEvent.native_key_code         := Msg.lParam;
       TempKeyEvent.is_system_key           := ord(True);
@@ -179,12 +179,12 @@ end;
 
 procedure TChildForm.HandleSysKeyDownMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempKeyEvent : TCefKeyEvent;
+  TempKeyEvent : TOldCefKeyEvent;
 begin
   if Panel1.Focused then
     begin
       TempKeyEvent.kind                    := KEYEVENT_RAWKEYDOWN;
-      TempKeyEvent.modifiers               := GetCefKeyboardModifiers(Msg.wParam, Msg.lParam);
+      TempKeyEvent.modifiers               := GeTOldCefKeyboardModifiers(Msg.wParam, Msg.lParam);
       TempKeyEvent.windows_key_code        := Msg.wParam;
       TempKeyEvent.native_key_code         := Msg.lParam;
       TempKeyEvent.is_system_key           := ord(True);
@@ -201,12 +201,12 @@ end;
 
 procedure TChildForm.HandleSysKeyUpMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempKeyEvent : TCefKeyEvent;
+  TempKeyEvent : TOldCefKeyEvent;
 begin
   if Panel1.Focused then
     begin
       TempKeyEvent.kind                    := KEYEVENT_KEYUP;
-      TempKeyEvent.modifiers               := GetCefKeyboardModifiers(Msg.wParam, Msg.lParam);
+      TempKeyEvent.modifiers               := GeTOldCefKeyboardModifiers(Msg.wParam, Msg.lParam);
       TempKeyEvent.windows_key_code        := Msg.wParam;
       TempKeyEvent.native_key_code         := Msg.lParam;
       TempKeyEvent.is_system_key           := ord(True);
@@ -223,12 +223,12 @@ end;
 
 procedure TChildForm.HandleKeyDownMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempKeyEvent : TCefKeyEvent;
+  TempKeyEvent : TOldCefKeyEvent;
 begin
   if Panel1.Focused then
     begin
       TempKeyEvent.kind                    := KEYEVENT_RAWKEYDOWN;
-      TempKeyEvent.modifiers               := GetCefKeyboardModifiers(Msg.wParam, Msg.lParam);
+      TempKeyEvent.modifiers               := GeTOldCefKeyboardModifiers(Msg.wParam, Msg.lParam);
       TempKeyEvent.windows_key_code        := Msg.wParam;
       TempKeyEvent.native_key_code         := Msg.lParam;
       TempKeyEvent.is_system_key           := ord(False);
@@ -245,12 +245,12 @@ end;
 
 procedure TChildForm.HandleKeyUpMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempKeyEvent : TCefKeyEvent;
+  TempKeyEvent : TOldCefKeyEvent;
 begin
   if Panel1.Focused then
     begin
       TempKeyEvent.kind                    := KEYEVENT_KEYUP;
-      TempKeyEvent.modifiers               := GetCefKeyboardModifiers(Msg.wParam, Msg.lParam);
+      TempKeyEvent.modifiers               := GeTOldCefKeyboardModifiers(Msg.wParam, Msg.lParam);
       TempKeyEvent.windows_key_code        := Msg.wParam;
       TempKeyEvent.native_key_code         := Msg.lParam;
       TempKeyEvent.is_system_key           := ord(False);
@@ -267,12 +267,12 @@ end;
 
 procedure TChildForm.HandleCharMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempKeyEvent : TCefKeyEvent;
+  TempKeyEvent : TOldCefKeyEvent;
 begin
   if Panel1.Focused then
     begin
       TempKeyEvent.kind                    := KEYEVENT_CHAR;
-      TempKeyEvent.modifiers               := GetCefKeyboardModifiers(Msg.wParam, Msg.lParam);
+      TempKeyEvent.modifiers               := GeTOldCefKeyboardModifiers(Msg.wParam, Msg.lParam);
       TempKeyEvent.windows_key_code        := Msg.wParam;
       TempKeyEvent.native_key_code         := Msg.lParam;
       TempKeyEvent.is_system_key           := ord(False);
@@ -289,23 +289,23 @@ end;
 
 procedure TChildForm.HandleMouseWheelMsg(var Msg: tagMSG; var Handled: Boolean);
 var
-  TempMouseEvent : TCefMouseEvent;
+  TempMouseEvent : TOldCefMouseEvent;
 begin
-  if Panel1.Focused and (GlobalCEFApp <> nil) then
+  if Panel1.Focused and (GlobalOldCEFApp <> nil) then
     begin
       TempMouseEvent.x         := Msg.lParam and $FFFF;
       TempMouseEvent.y         := Msg.lParam shr 16;
-      TempMouseEvent.modifiers := GetCefMouseModifiers(Msg.wParam);
-      DeviceToLogical(TempMouseEvent, GlobalCEFApp.DeviceScaleFactor);
+      TempMouseEvent.modifiers := GeTOldCefMouseModifiers(Msg.wParam);
+      DeviceToLogical(TempMouseEvent, GlobalOldCEFApp.DeviceScaleFactor);
       Chromium1.SendMouseWheelEvent(@TempMouseEvent, 0, int16(Msg.wParam shr 16));
       Handled := False;
     end;
 end;
 
-function TChildForm.CreateClientHandler(var   windowInfo      : TCefWindowInfo;
-                                        var   client          : ICefClient;
+function TChildForm.CreateClientHandler(var   windowInfo      : TOldCefWindowInfo;
+                                        var   client          : IOldCefClient;
                                         const targetFrameName : string;
-                                        const popupFeatures   : TCefPopupFeatures) : boolean;
+                                        const popupFeatures   : TOldCefPopupFeatures) : boolean;
 begin
   Chromium1.InitializeDragAndDrop(Panel1);
 
@@ -323,23 +323,23 @@ begin
   if (FPopupFeatures.heightset <> 0) then Chromium1.ResizeFormHeightTo(FPopupFeatures.height);
 end;
 
-procedure TChildForm.Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TChildForm.Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TChildForm.Chromium1BeforePopup(Sender : TObject;
-                                          const browser            : ICefBrowser;
-                                          const frame              : ICefFrame;
-                                          const targetUrl          : ustring;
-                                          const targetFrameName    : ustring;
-                                                targetDisposition  : TCefWindowOpenDisposition;
+                                          const browser            : IOldCefBrowser;
+                                          const frame              : IOldCefFrame;
+                                          const targetUrl          : oldustring;
+                                          const targetFrameName    : oldustring;
+                                                targetDisposition  : TOldCefWindowOpenDisposition;
                                                 userGesture        : Boolean;
-                                          const popupFeatures      : TCefPopupFeatures;
-                                          var   windowInfo         : TCefWindowInfo;
-                                          var   client             : ICefClient;
-                                          var   settings           : TCefBrowserSettings;
+                                          const popupFeatures      : TOldCefPopupFeatures;
+                                          var   windowInfo         : TOldCefWindowInfo;
+                                          var   client             : IOldCefClient;
+                                          var   settings           : TOldCefBrowserSettings;
                                           var   noJavascriptAccess : Boolean;
                                           var   Result             : Boolean);
 begin
@@ -357,29 +357,29 @@ end;
 
 
 procedure TChildForm.Chromium1CursorChange(Sender : TObject;
-                                           const browser          : ICefBrowser;
+                                           const browser          : IOldCefBrowser;
                                                  cursor           : HICON;
-                                                 cursorType       : TCefCursorType;
-                                           const customCursorInfo : PCefCursorInfo);
+                                                 cursorType       : TOldCefCursorType;
+                                           const customCursorInfo : POldCefCursorInfo);
 begin
   Panel1.Cursor := GefCursorToWindowsCursor(cursorType);
 end;
 
 procedure TChildForm.Chromium1GetScreenInfo(Sender : TObject;
-                                            const browser    : ICefBrowser;
-                                            var   screenInfo : TCefScreenInfo;
+                                            const browser    : IOldCefBrowser;
+                                            var   screenInfo : TOldCefScreenInfo;
                                             out   Result     : Boolean);
 var
-  TempRect : TCEFRect;
+  TempRect : TOldCefRect;
 begin
-  if (GlobalCEFApp <> nil) then
+  if (GlobalOldCEFApp <> nil) then
     begin
       TempRect.x      := 0;
       TempRect.y      := 0;
-      TempRect.width  := DeviceToLogical(Panel1.Width,  GlobalCEFApp.DeviceScaleFactor);
-      TempRect.height := DeviceToLogical(Panel1.Height, GlobalCEFApp.DeviceScaleFactor);
+      TempRect.width  := DeviceToLogical(Panel1.Width,  GlobalOldCEFApp.DeviceScaleFactor);
+      TempRect.height := DeviceToLogical(Panel1.Height, GlobalOldCEFApp.DeviceScaleFactor);
 
-      screenInfo.device_scale_factor := GlobalCEFApp.DeviceScaleFactor;
+      screenInfo.device_scale_factor := GlobalOldCEFApp.DeviceScaleFactor;
       screenInfo.depth               := 0;
       screenInfo.depth_per_component := 0;
       screenInfo.is_monochrome       := Ord(False);
@@ -393,7 +393,7 @@ begin
 end;
 
 procedure TChildForm.Chromium1GetScreenPoint(Sender : TObject;
-                                             const browser : ICefBrowser;
+                                             const browser : IOldCefBrowser;
                                                    viewX   : Integer;
                                                    viewY   : Integer;
                                              var   screenX : Integer;
@@ -402,10 +402,10 @@ procedure TChildForm.Chromium1GetScreenPoint(Sender : TObject;
 var
   TempScreenPt, TempViewPt : TPoint;
 begin
-  if (GlobalCEFApp <> nil) then
+  if (GlobalOldCEFApp <> nil) then
     begin
-      TempViewPt.x := LogicalToDevice(viewX, GlobalCEFApp.DeviceScaleFactor);
-      TempViewPt.y := LogicalToDevice(viewY, GlobalCEFApp.DeviceScaleFactor);
+      TempViewPt.x := LogicalToDevice(viewX, GlobalOldCEFApp.DeviceScaleFactor);
+      TempViewPt.y := LogicalToDevice(viewY, GlobalOldCEFApp.DeviceScaleFactor);
       TempScreenPt := Panel1.ClientToScreen(TempViewPt);
       screenX      := TempScreenPt.x;
       screenY      := TempScreenPt.y;
@@ -416,16 +416,16 @@ begin
 end;
 
 procedure TChildForm.Chromium1GetViewRect(Sender : TObject;
-                                          const browser : ICefBrowser;
-                                          var   rect    : TCefRect;
+                                          const browser : IOldCefBrowser;
+                                          var   rect    : TOldCefRect;
                                           out   Result  : Boolean);
 begin
-  if (GlobalCEFApp <> nil) then
+  if (GlobalOldCEFApp <> nil) then
     begin
       rect.x      := 0;
       rect.y      := 0;
-      rect.width  := DeviceToLogical(Panel1.Width,  GlobalCEFApp.DeviceScaleFactor);
-      rect.height := DeviceToLogical(Panel1.Height, GlobalCEFApp.DeviceScaleFactor);
+      rect.width  := DeviceToLogical(Panel1.Width,  GlobalOldCEFApp.DeviceScaleFactor);
+      rect.height := DeviceToLogical(Panel1.Height, GlobalOldCEFApp.DeviceScaleFactor);
       Result      := True;
     end
    else
@@ -433,10 +433,10 @@ begin
 end;
 
 procedure TChildForm.Chromium1Paint(Sender : TObject;
-                                    const browser         : ICefBrowser;
-                                          kind            : TCefPaintElementType;
+                                    const browser         : IOldCefBrowser;
+                                          kind            : TOldCefPaintElementType;
                                           dirtyRectsCount : NativeUInt;
-                                    const dirtyRects      : PCefRectArray;
+                                    const dirtyRects      : POldCefRectArray;
                                     const buffer          : Pointer;
                                           width           : Integer;
                                           height          : Integer);
@@ -543,7 +543,7 @@ begin
 end;
 
 procedure TChildForm.Chromium1PopupShow(Sender : TObject;
-                                        const browser : ICefBrowser;
+                                        const browser : IOldCefBrowser;
                                               show    : Boolean);
 begin
   if show then
@@ -558,12 +558,12 @@ begin
 end;
 
 procedure TChildForm.Chromium1PopupSize(Sender : TObject;
-                                        const browser : ICefBrowser;
-                                        const rect    : PCefRect);
+                                        const browser : IOldCefBrowser;
+                                        const rect    : POldCefRect);
 begin
-  if (GlobalCEFApp <> nil) then
+  if (GlobalOldCEFApp <> nil) then
     begin
-      LogicalToDevice(rect^, GlobalCEFApp.DeviceScaleFactor);
+      LogicalToDevice(rect^, GlobalOldCEFApp.DeviceScaleFactor);
 
       FPopUpRect.Left   := rect.x;
       FPopUpRect.Top    := rect.y;
@@ -572,19 +572,19 @@ begin
     end;
 end;
 
-procedure TChildForm.Chromium1TitleChange(Sender: TObject; const browser: ICefBrowser; const title: ustring);
+procedure TChildForm.Chromium1TitleChange(Sender: TObject; const browser: IOldCefBrowser; const title: oldustring);
 begin
   Caption := title;
 end;
 
-procedure TChildForm.Chromium1Tooltip(Sender: TObject; const browser: ICefBrowser; var text: ustring; out Result: Boolean);
+procedure TChildForm.Chromium1Tooltip(Sender: TObject; const browser: IOldCefBrowser; var text: oldustring; out Result: Boolean);
 begin
   Panel1.hint     := text;
   Panel1.ShowHint := (length(text) > 0);
   Result          := True;
 end;
 
-function TChildForm.getModifiers(Shift: TShiftState): TCefEventFlags;
+function TChildForm.getModifiers(Shift: TShiftState): TOldCefEventFlags;
 begin
   Result := EVENTFLAG_NONE;
 
@@ -596,7 +596,7 @@ begin
   if (ssMiddle in Shift) then Result := Result or EVENTFLAG_MIDDLE_MOUSE_BUTTON;
 end;
 
-function TChildForm.GetButton(Button: TMouseButton): TCefMouseButtonType;
+function TChildForm.GetButton(Button: TMouseButton): TOldCefMouseButtonType;
 begin
   case Button of
     TMouseButton.mbRight  : Result := MBT_RIGHT;
@@ -637,14 +637,14 @@ procedure TChildForm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TChildForm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 procedure TChildForm.FormAfterMonitorDpiChanged(Sender: TObject; OldDPI, NewDPI: Integer);
@@ -717,10 +717,10 @@ end;
 
 procedure TChildForm.Panel1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
-  TempEvent : TCefMouseEvent;
+  TempEvent : TOldCefMouseEvent;
   TempTime  : integer;
 begin
-  if (GlobalCEFApp <> nil) and (Chromium1 <> nil) then
+  if (GlobalOldCEFApp <> nil) and (Chromium1 <> nil) then
     begin
       Panel1.SetFocus;
 
@@ -739,18 +739,18 @@ begin
       TempEvent.x         := X;
       TempEvent.y         := Y;
       TempEvent.modifiers := getModifiers(Shift);
-      DeviceToLogical(TempEvent, GlobalCEFApp.DeviceScaleFactor);
+      DeviceToLogical(TempEvent, GlobalOldCEFApp.DeviceScaleFactor);
       Chromium1.SendMouseClickEvent(@TempEvent, GetButton(Button), False, FLastClickCount);
     end;
 end;
 
 procedure TChildForm.Panel1MouseLeave(Sender: TObject);
 var
-  TempEvent : TCefMouseEvent;
+  TempEvent : TOldCefMouseEvent;
   TempPoint : TPoint;
   TempTime  : integer;
 begin
-  if (GlobalCEFApp <> nil) and (Chromium1 <> nil) then
+  if (GlobalOldCEFApp <> nil) and (Chromium1 <> nil) then
     begin
       GetCursorPos(TempPoint);
       TempPoint := Panel1.ScreenToclient(TempPoint);
@@ -759,39 +759,39 @@ begin
 
       TempEvent.x         := TempPoint.x;
       TempEvent.y         := TempPoint.y;
-      TempEvent.modifiers := GetCefMouseModifiers;
-      DeviceToLogical(TempEvent, GlobalCEFApp.DeviceScaleFactor);
+      TempEvent.modifiers := GeTOldCefMouseModifiers;
+      DeviceToLogical(TempEvent, GlobalOldCEFApp.DeviceScaleFactor);
       Chromium1.SendMouseMoveEvent(@TempEvent, True);
     end;
 end;
 
 procedure TChildForm.Panel1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
-  TempEvent : TCefMouseEvent;
+  TempEvent : TOldCefMouseEvent;
   TempTime  : integer;
 begin
-  if (GlobalCEFApp <> nil) and (Chromium1 <> nil) then
+  if (GlobalOldCEFApp <> nil) and (Chromium1 <> nil) then
     begin
       if CancelPreviousClick(x, y, TempTime) then InitializeLastClick;
 
       TempEvent.x         := X;
       TempEvent.y         := Y;
       TempEvent.modifiers := getModifiers(Shift);
-      DeviceToLogical(TempEvent, GlobalCEFApp.DeviceScaleFactor);
+      DeviceToLogical(TempEvent, GlobalOldCEFApp.DeviceScaleFactor);
       Chromium1.SendMouseMoveEvent(@TempEvent, False);
     end;
 end;
 
 procedure TChildForm.Panel1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
-  TempEvent : TCefMouseEvent;
+  TempEvent : TOldCefMouseEvent;
 begin
-  if (GlobalCEFApp <> nil) and (Chromium1 <> nil) then
+  if (GlobalOldCEFApp <> nil) and (Chromium1 <> nil) then
     begin
       TempEvent.x         := X;
       TempEvent.y         := Y;
       TempEvent.modifiers := getModifiers(Shift);
-      DeviceToLogical(TempEvent, GlobalCEFApp.DeviceScaleFactor);
+      DeviceToLogical(TempEvent, GlobalOldCEFApp.DeviceScaleFactor);
       Chromium1.SendMouseClickEvent(@TempEvent, GetButton(Button), True, FLastClickCount);
     end;
 end;

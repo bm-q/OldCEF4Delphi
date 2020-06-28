@@ -37,7 +37,7 @@
 
 unit uFMXApplicationService;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 // This unit is based in the TFMXApplicationService class created by Takashi Yamamoto
 // https://www.gesource.jp/weblog/?p=7367
@@ -77,12 +77,12 @@ implementation
 uses
   FMX.Forms,
   uSimpleFMXBrowser,
-  uFMXWorkScheduler,
-  uCEFApplication,
+  oldFMXWorkScheduler,
+  oldCEFApplication,
   {$IFDEF MSWINDOWS}
   Winapi.Messages, Winapi.Windows,
   {$ENDIF}
-  uCEFConstants;
+  oldCEFConstants;
 
 class procedure TFMXApplicationService.AddPlatformService;
 begin
@@ -167,14 +167,14 @@ begin
       WM_ENTERMENULOOP :
         if not(Application.Terminated) and
            (TempMsg.wParam = 0) and
-           (GlobalCEFApp <> nil) then
-          GlobalCEFApp.OsmodalLoop := True;
+           (GlobalOldCEFApp <> nil) then
+          GlobalOldCEFApp.OsmodalLoop := True;
 
       WM_EXITMENULOOP :
         if not(Application.Terminated) and
            (TempMsg.wParam = 0) and
-           (GlobalCEFApp <> nil) then
-          GlobalCEFApp.OsmodalLoop := False;
+           (GlobalOldCEFApp <> nil) then
+          GlobalOldCEFApp.OsmodalLoop := False;
 
       CEF_AFTERCREATED :
         if not(Application.Terminated) and

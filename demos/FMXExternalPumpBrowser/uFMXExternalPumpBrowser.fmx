@@ -70,7 +70,7 @@ object FMXExternalPumpBrowserFrm: TFMXExternalPumpBrowserFrm
       end
     end
   end
-  object Panel1: TFMXBufferPanel
+  object Panel1: TOldFMXBufferPanel
     Align = Client
     TabOrder = 0
     Color = claTomato
@@ -104,7 +104,7 @@ object FMXExternalPumpBrowserFrm: TFMXExternalPumpBrowserFrm
     Left = 40
     Top = 201
   end
-  object chrmosr: TFMXChromium
+  object chrmosr: TOldFMXChromium
     OnTooltip = chrmosrTooltip
     OnBeforePopup = chrmosrBeforePopup
     OnBeforeClose = chrmosrBeforeClose

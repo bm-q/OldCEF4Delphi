@@ -47,7 +47,7 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uJSSimpleWindowBinding in 'uJSSimpleWindowBinding.pas' {JSSimpleWindowBindingFrm};
 
 {$R *.res}
@@ -56,10 +56,10 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
   // This is the same demo than the JSSimpleWindowBinding but using a different executable for the subprocesses.
-  // Notice that GlobalCEFApp.OnContextCreated is now defined in the SubProcess.
+  // Notice that GlobalOldCEFApp.OnContextCreated is now defined in the SubProcess.
 
   // Follow these steps to test this demo :
   // 1. Build the SubProcess project in this directory.
@@ -67,9 +67,9 @@ begin
   // 3. Build this project : JSSimpleWindowBinding
   // 4. Run this demo : JSSimpleWindowBinding
 
-  GlobalCEFApp.BrowserSubprocessPath := 'SubProcess.exe';
+  GlobalOldCEFApp.BrowserSubprocessPath := 'SubProcess.exe';
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       {$IFDEF DELPHI11_UP}
@@ -79,5 +79,5 @@ begin
       Application.Run;
     end;
 
-  GlobalCEFApp.Free;
+  GlobalOldCEFApp.Free;
 end.

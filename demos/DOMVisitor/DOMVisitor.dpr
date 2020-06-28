@@ -47,8 +47,8 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
-  uCEFConstants,
+  oldCefApplication,
+  oldCefConstants,
   uDOMVisitor in 'uDOMVisitor.pas' {DOMVisitorFrm};
 
 {$R *.res}
@@ -56,11 +56,11 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  // GlobalCEFApp creation and initialization moved to a different unit to fix the memory leak described in the bug #89
+  // GlobalOldCEFApp creation and initialization moved to a different unit to fix the memory leak described in the bug #89
   // https://github.com/salvadordf/CEF4Delphi/issues/89
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.MainFormOnTaskbar := True;
@@ -68,7 +68,7 @@ begin
       Application.Run;
     end;
 
-  // This is not really necessary to fix the bug #89 but if you free GlobalCEFApp in a different unit
+  // This is not really necessary to fix the bug #89 but if you free GlobalOldCEFApp in a different unit
   // then you can call 'FreeAndNil' without adding SysUtils to this DPR.
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

@@ -2,7 +2,7 @@ program CEF4DelphiLoader;
 
 uses
   Vcl.Forms,
-  uCEF4DelphiLoader in 'uCEF4DelphiLoader.pas' {Form1};
+  uCef4DelphiLoader in 'uCef4DelphiLoader.pas' {Form1};
 
 {$R *.res}
 

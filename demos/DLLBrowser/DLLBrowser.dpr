@@ -55,7 +55,7 @@ uses
   {$ELSE}
   SysUtils,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uWebBrowser in 'uWebBrowser.pas' {WebBrowserFrm};
 
 {$R *.res}
@@ -76,7 +76,7 @@ uses
 //    CEF you will have problems.
 
 // When you use CEF in a DLL you must use a different EXE for the subprocesses and that EXE
-// must configure GlobalCEFApp with the same properties.
+// must configure GlobalOldCEFApp with the same properties.
 
 // ***************************
 // This demo is incomplete!!!!
@@ -86,32 +86,32 @@ uses
 
 procedure InitializeCEF4Delphi; stdcall;
 begin
-  GlobalCEFApp := TCefApplication.Create;
+  GlobalOldCEFApp := TOldCefApplication.Create;
 
   // In case you want to use custom directories for the CEF3 binaries, cache, cookies and user data.
   // If you don't set a cache directory the browser will use in-memory cache.
   // The cache, cookies and user data directories must be writable.
 {
-  GlobalCEFApp.ResourcesDirPath     := 'cef';
-  GlobalCEFApp.LocalesDirPath       := 'cef\locales';
-  GlobalCEFApp.cache                := 'cef\cache';
-  GlobalCEFApp.cookies              := 'cef\cookies';
-  GlobalCEFApp.UserDataPath         := 'cef\User Data';
+  GlobalOldCEFApp.ResourcesDirPath     := 'cef';
+  GlobalOldCEFApp.LocalesDirPath       := 'cef\locales';
+  GlobalOldCEFApp.cache                := 'cef\cache';
+  GlobalOldCEFApp.cookies              := 'cef\cookies';
+  GlobalOldCEFApp.UserDataPath         := 'cef\User Data';
 }
 
-  GlobalCEFApp.SetCurrentDir         := True;
-  GlobalCEFApp.BrowserSubprocessPath := 'SubProcess.exe';
+  GlobalOldCEFApp.SetCurrentDir         := True;
+  GlobalOldCEFApp.BrowserSubprocessPath := 'SubProcess.exe';
 
   // This demo uses a different EXE for the subprocesses.
   // With this configuration it's not necessary to have the
-  // GlobalCEFApp.StartMainProcess call in a if..then clause.
+  // GlobalOldCEFApp.StartMainProcess call in a if..then clause.
 
-  GlobalCEFApp.StartMainProcess;
+  GlobalOldCEFApp.StartMainProcess;
 end;
 
 procedure FinalizeCEF4Delphi; stdcall;
 begin
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end;
 
 procedure ShowBrowser; stdcall;

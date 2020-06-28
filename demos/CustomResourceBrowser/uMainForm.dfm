@@ -17,7 +17,7 @@ object MainForm: TMainForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object ChromiumWindow1: TChromiumWindow
+  object ChromiumWindow1: TOldChromiumWindow
     Left = 0
     Top = 30
     Width = 781

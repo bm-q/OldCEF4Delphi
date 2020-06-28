@@ -55,7 +55,7 @@ object JSExecutingFunctionsFrm: TJSExecutingFunctionsFrm
       OnClick = GoBtnClick
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 30
     Width = 978
@@ -63,7 +63,7 @@ object JSExecutingFunctionsFrm: TJSExecutingFunctionsFrm
     Align = alClient
     TabOrder = 1
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnBeforeContextMenu = Chromium1BeforeContextMenu
     OnContextMenuCommand = Chromium1ContextMenuCommand
     OnBeforePopup = Chromium1BeforePopup

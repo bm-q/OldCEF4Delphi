@@ -37,32 +37,32 @@
 
 unit uMyV8Handler;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
 uses
-  uCEFTypes, uCEFInterfaces, uCEFv8Value, uCEFv8Handler;
+  oldCEFTypes, oldCEFInterfaces, oldCEFv8Value, oldCEFv8Handler;
 
 type
-  TMyV8Handler = class(TCefv8HandlerOwn)
+  TMyV8Handler = class(TOldCefv8HandlerOwn)
     protected
       FMyParam : string;
 
-      function Execute(const name: ustring; const obj: ICefv8Value; const arguments: TCefv8ValueArray; var retval: ICefv8Value; var exception: ustring): Boolean; override;
+      function Execute(const name: oldustring; const obj: IOldCefv8Value; const arguments: TOldCefv8ValueArray; var retval: IOldCefv8Value; var exception: oldustring): Boolean; override;
   end;
 
 implementation
 
-function TMyV8Handler.Execute(const name      : ustring;
-                              const obj       : ICefv8Value;
-                              const arguments : TCefv8ValueArray;
-                              var   retval    : ICefv8Value;
-                              var   exception : ustring): Boolean;
+function TMyV8Handler.Execute(const name      : oldustring;
+                              const obj       : IOldCefv8Value;
+                              const arguments : TOldCefv8ValueArray;
+                              var   retval    : IOldCefv8Value;
+                              var   exception : oldustring): Boolean;
 begin
   if (name = 'GetMyParam') then
     begin
-      retval := TCefv8ValueRef.NewString(FMyParam);
+      retval := TOldCefv8ValueRef.NewString(FMyParam);
       Result := True;
     end
    else

@@ -16,7 +16,7 @@ object JSEvalFrm: TJSEvalFrm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCefWindowParent
     Left = 0
     Top = 30
     Width = 878
@@ -62,7 +62,7 @@ object JSEvalFrm: TJSEvalFrm
       ExplicitHeight = 21
     end
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnProcessMessageReceived = Chromium1ProcessMessageReceived
     OnBeforeContextMenu = Chromium1BeforeContextMenu
     OnContextMenuCommand = Chromium1ContextMenuCommand

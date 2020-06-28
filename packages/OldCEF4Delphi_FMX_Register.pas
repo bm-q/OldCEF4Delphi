@@ -39,7 +39,7 @@ unit OldCEF4Delphi_FMX_Register;
 
 {$R chromium.dcr}
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
@@ -49,14 +49,14 @@ implementation
 
 uses
   System.Classes,
-  uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uBufferPanel, uCEFWorkScheduler,
-  uFMXBufferPanel, uFMXChromium, uFMXWorkScheduler, uCEFUrlRequestClientComponent;
+  oldCEFChromium, oldCEFWindowParent, oldCEFChromiumWindow, oldBufferPanel, oldCEFWorkScheduler,
+  oldFMXBufferPanel, oldFMXChromium, oldFMXWorkScheduler, oldCEFUrlRequestClientComponent;
 
 procedure Register;
 begin
-  RegisterComponents('Chromium', [TChromium, TCEFWindowParent, TChromiumWindow, TBufferPanel,
-                                  TFMXBufferPanel, TFMXChromium, TFMXWorkScheduler,
-                                  TCEFWorkScheduler, TCEFUrlRequestClientComponent]);
+  RegisterComponents('OldChromium', [TOldChromium, TOldCEFWindowParent, TOldChromiumWindow, TOldBufferPanel,
+                                  TOldFMXBufferPanel, TOldFMXChromium, TOldFMXWorkScheduler,
+                                  TOldCEFWorkScheduler, TOldCEFUrlRequestClientComponent]);
 end;
 
 end.

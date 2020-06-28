@@ -37,17 +37,17 @@
 
 unit uMyV8Handler;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 
 uses
-  uCEFv8Context, uCEFTypes, uCEFInterfaces, uCEFv8Value, uCEFv8Handler;
+  oldCEFv8Context, oldCEFTypes, oldCEFInterfaces, oldCEFv8Value, oldCEFv8Handler;
 
 type
-  TMyV8Handler = class(TCefv8HandlerOwn)
+  TMyV8Handler = class(TOldCefv8HandlerOwn)
     protected
-      function Execute(const name: ustring; const obj: ICefv8Value; const arguments: TCefv8ValueArray; var retval: ICefv8Value; var exception: ustring): Boolean; override;
+      function Execute(const name: oldustring; const obj: IOldCefv8Value; const arguments: TOldCefv8ValueArray; var retval: IOldCefv8Value; var exception: oldustring): Boolean; override;
   end;
 
 implementation
@@ -55,11 +55,11 @@ implementation
 uses
   uJSExecutingFunctions;
 
-function TMyV8Handler.Execute(const name      : ustring;
-                              const obj       : ICefv8Value;
-                              const arguments : TCefv8ValueArray;
-                              var   retval    : ICefv8Value;
-                              var   exception : ustring): Boolean;
+function TMyV8Handler.Execute(const name      : oldustring;
+                              const obj       : IOldCefv8Value;
+                              const arguments : TOldCefv8ValueArray;
+                              var   retval    : IOldCefv8Value;
+                              var   exception : oldustring): Boolean;
 begin
   Result := False;
 
@@ -68,7 +68,7 @@ begin
      arguments[0].IsFunction then
     begin
       GlobalCallbackFunc    := arguments[0];
-      GlobalCallbackContext := TCefv8ContextRef.Current;
+      GlobalCallbackContext := TOldCefv8ContextRef.Current;
       Result                := True;
     end;
 end;

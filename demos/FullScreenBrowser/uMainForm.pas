@@ -48,42 +48,42 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFTypes, uCEFConstants,
+  oldCEFChromium, oldCEFWindowParent, oldCEFInterfaces, oldCEFTypes, oldCEFConstants,
   Vcl.ExtCtrls;
 
 type
   TMainForm = class(TForm)
-    CEFWindowParent1: TCEFWindowParent;
-    Chromium1: TChromium;
+    CEFWindowParent1: TOldCefWindowParent;
+    Chromium1: TOldChromium;
     Timer1: TTimer;
     procedure Chromium1PreKeyEvent(Sender: TObject;
-      const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+      const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
       out isKeyboardShortcut, Result: Boolean);
     procedure Chromium1KeyEvent(Sender: TObject;
-      const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+      const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
       out Result: Boolean);
     procedure FormShow(Sender: TObject);
     procedure Chromium1AfterCreated(Sender: TObject;
-      const browser: ICefBrowser);
+      const browser: IOldCefBrowser);
     procedure Timer1Timer(Sender: TObject);
     procedure Chromium1BeforePopup(Sender: TObject;
-      const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-      targetFrameName: ustring;
-      targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean;
-      const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo;
-      var client: ICefClient; var settings: TCefBrowserSettings;
+      const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+      targetFrameName: oldustring;
+      targetDisposition: TOldCefWindowOpenDisposition; userGesture: Boolean;
+      const popupFeatures: TOldCefPopupFeatures; var windowInfo: TOldCefWindowInfo;
+      var client: IOldCefClient; var settings: TOldCefBrowserSettings;
       var noJavascriptAccess: Boolean; var Result: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Chromium1BeforeClose(Sender: TObject;
-      const browser: ICefBrowser);
-    procedure Chromium1Close(Sender: TObject; const browser: ICefBrowser;
-      var aAction : TCefCloseBrowserAction);
+      const browser: IOldCefBrowser);
+    procedure Chromium1Close(Sender: TObject; const browser: IOldCefBrowser;
+      var aAction : TOldCefCloseBrowserAction);
   private
     { Private declarations }
   protected
     // Variables to control when can we destroy the form safely
-    FCanClose : boolean;  // Set to True in TChromium.OnBeforeClose
+    FCanClose : boolean;  // Set to True in TOldChromium.OnBeforeClose
     FClosing  : boolean;  // Set to True in the CloseQuery event.
 
     procedure WMMove(var aMessage : TWMMove); message WM_MOVE;
@@ -107,7 +107,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uCEFApplication;
+  oldCEFApplication;
 
 procedure TMainForm.HandleKeyUp(const aMsg : TMsg; var aHandled : boolean);
 var
@@ -147,30 +147,30 @@ begin
   if (TempKeyMsg.CharCode = VK_ESCAPE) then aHandled := True;
 end;
 
-procedure TMainForm.Chromium1AfterCreated(Sender: TObject; const browser: ICefBrowser);
+procedure TMainForm.Chromium1AfterCreated(Sender: TObject; const browser: IOldCefBrowser);
 begin
   PostMessage(Handle, CEF_AFTERCREATED, 0, 0);
 end;
 
-procedure TMainForm.Chromium1BeforeClose(Sender: TObject; const browser: ICefBrowser);
+procedure TMainForm.Chromium1BeforeClose(Sender: TObject; const browser: IOldCefBrowser);
 begin
   FCanClose := True;
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
 procedure TMainForm.Chromium1BeforePopup(Sender: TObject;
-  const browser: ICefBrowser; const frame: ICefFrame; const targetUrl,
-  targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition;
-  userGesture: Boolean; const popupFeatures: TCefPopupFeatures;
-  var windowInfo: TCefWindowInfo; var client: ICefClient;
-  var settings: TCefBrowserSettings; var noJavascriptAccess: Boolean;
+  const browser: IOldCefBrowser; const frame: IOldCefFrame; const targetUrl,
+  targetFrameName: oldustring; targetDisposition: TOldCefWindowOpenDisposition;
+  userGesture: Boolean; const popupFeatures: TOldCefPopupFeatures;
+  var windowInfo: TOldCefWindowInfo; var client: IOldCefClient;
+  var settings: TOldCefBrowserSettings; var noJavascriptAccess: Boolean;
   var Result: Boolean);
 begin
   // For simplicity, this demo blocks all popup windows and new tabs
   Result := (targetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
-procedure TMainForm.Chromium1Close(Sender: TObject; const browser: ICefBrowser; var aAction : TCefCloseBrowserAction);
+procedure TMainForm.Chromium1Close(Sender: TObject; const browser: IOldCefBrowser; var aAction : TOldCefCloseBrowserAction);
 begin
   PostMessage(Handle, CEF_DESTROY, 0, 0);
   aAction := cbaDelay;
@@ -187,7 +187,7 @@ begin
 end;
 
 procedure TMainForm.Chromium1KeyEvent(Sender: TObject;
-  const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+  const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
   out Result: Boolean);
 var
   TempMsg : TMsg;
@@ -213,7 +213,7 @@ begin
 end;
 
 procedure TMainForm.Chromium1PreKeyEvent(Sender: TObject;
-  const browser: ICefBrowser; const event: PCefKeyEvent; osEvent: PMsg;
+  const browser: IOldCefBrowser; const event: POldCefKeyEvent; osEvent: PMsg;
   out isKeyboardShortcut, Result: Boolean);
 begin
   Result := False;
@@ -246,7 +246,7 @@ procedure TMainForm.FormShow(Sender: TObject);
 begin
   Chromium1.DefaultUrl := 'https://www.google.com';
 
-  // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
+  // GlobalOldCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
   if not(Chromium1.CreateBrowser(CEFWindowParent1, '')) then Timer1.Enabled := True;
 end;
@@ -269,14 +269,14 @@ procedure TMainForm.WMEnterMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := True;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := True;
 end;
 
 procedure TMainForm.WMExitMenuLoop(var aMessage: TMessage);
 begin
   inherited;
 
-  if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
+  if (aMessage.wParam = 0) and (GlobalOldCEFApp <> nil) then GlobalOldCEFApp.OsmodalLoop := False;
 end;
 
 end.

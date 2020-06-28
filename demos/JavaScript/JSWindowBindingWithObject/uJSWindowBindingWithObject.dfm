@@ -54,15 +54,17 @@ object JSWindowBindingWithObjectFrm: TJSWindowBindingWithObjectFrm
       OnClick = GoBtnClick
     end
   end
-  object CEFWindowParent1: TCEFWindowParent
+  object CEFWindowParent1: TOldCEFWindowParent
     Left = 0
     Top = 30
     Width = 978
     Height = 559
     Align = alClient
     TabOrder = 1
+    ExplicitLeft = 48
+    ExplicitTop = 36
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnBeforePopup = Chromium1BeforePopup
     OnAfterCreated = Chromium1AfterCreated
     OnBeforeClose = Chromium1BeforeClose

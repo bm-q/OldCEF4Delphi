@@ -37,7 +37,7 @@
 
 unit uCEF4DelphiLoader;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 interface
 

@@ -21,7 +21,7 @@ object ChildForm: TChildForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TBufferPanel
+  object Panel1: TOldBufferPanel
     Left = 0
     Top = 0
     Width = 352
@@ -41,7 +41,7 @@ object ChildForm: TChildForm
     OnResize = Panel1Resize
     OnMouseLeave = Panel1MouseLeave
   end
-  object Chromium1: TChromium
+  object Chromium1: TOldChromium
     OnTitleChange = Chromium1TitleChange
     OnTooltip = Chromium1Tooltip
     OnBeforePopup = Chromium1BeforePopup

@@ -47,8 +47,8 @@ uses
   Forms,
   Windows,
   {$ENDIF }
-  uCEFApplication,
-  uCEFWorkScheduler,
+  oldCefApplication,
+  oldCefWorkScheduler,
   uMainForm in 'uMainForm.pas' {MainForm},
   uChildForm in 'uChildForm.pas' {ChildForm};
 
@@ -57,9 +57,9 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 
 begin
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.CreateForm(TMainForm, MainForm);
@@ -69,6 +69,6 @@ begin
       MainForm.Free;
     end;
 
-  DestroyGlobalCEFApp;
-  DestroyGlobalCEFWorkScheduler;
+  DestroyGlobalOldCEFApp;
+  DestroyGlobalOldCEFWorkScheduler;
 end.

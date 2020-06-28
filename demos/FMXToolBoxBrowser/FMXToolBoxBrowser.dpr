@@ -43,7 +43,7 @@ uses
   {$IFDEF MSWINDOWS}
   WinApi.Windows,
   {$ENDIF }
-  uCEFApplication,
+  oldCefApplication,
   uFMXApplicationService in 'uFMXApplicationService.pas',
   uMainForm in 'uMainForm.pas' {MainForm},
   uChildForm in 'uChildForm.pas' {ChildForm};
@@ -51,14 +51,14 @@ uses
 {$R *.res}
 
 begin
-  CreateGlobalCEFApp;
+  CreateGlobalOldCEFApp;
 
-  if GlobalCEFApp.StartMainProcess then
+  if GlobalOldCEFApp.StartMainProcess then
     begin
       Application.Initialize;
       Application.CreateForm(TMainForm, MainForm);
       Application.Run;
     end;
 
-  DestroyGlobalCEFApp;
+  DestroyGlobalOldCEFApp;
 end.

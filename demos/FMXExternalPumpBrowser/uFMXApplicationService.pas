@@ -37,7 +37,7 @@
 
 unit uFMXApplicationService;
 
-{$I cef.inc}
+{$I oldcef.inc}
 
 // This unit is based in the TFMXApplicationService class created by Takashi Yamamoto
 // https://www.gesource.jp/weblog/?p=7367
@@ -80,7 +80,7 @@ uses
   {$IFDEF MSWINDOWS}
   Winapi.Messages, Winapi.Windows,
   {$ENDIF}
-  uCEFConstants;
+  oldCEFConstants;
 
 class procedure TFMXApplicationService.AddPlatformService;
 begin
